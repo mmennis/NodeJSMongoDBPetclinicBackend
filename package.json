@@ -1,0 +1,26 @@
+{
+  "name": "petclinic-nodejs",
+  "version": "1.0.0",
+  "description": "Implementation of PetClinic Demo in NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmennis/NodeJSMongoDBPetclinicBackend.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "MongoDB",
+    "Express",
+    "backend",
+    "REST"
+  ],
+  "author": "mmennis@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmennis/NodeJSMongoDBPetclinicBackend/issues"
+  },
+  "homepage": "https://github.com/mmennis/NodeJSMongoDBPetclinicBackend#readme"
+}
