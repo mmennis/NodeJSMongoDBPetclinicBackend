@@ -22,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/mmennis/NodeJSMongoDBPetclinicBackend/issues"
   },
-  "homepage": "https://github.com/mmennis/NodeJSMongoDBPetclinicBackend#readme"
+  "homepage": "https://github.com/mmennis/NodeJSMongoDBPetclinicBackend#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.0",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7"
+  }
 }
