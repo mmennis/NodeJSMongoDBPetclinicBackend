@@ -15,8 +15,8 @@ const config = require('./environment/index');
 module.exports = function(app) {
     const env = app.get('env');
 
-    app.use(cors);
-    app.use(compression);
+    app.use(cors());
+    app.use(compression());
     app.use(bodyParser.urlencoded({
         extended: true,
         limit: '50mb'
@@ -27,6 +27,6 @@ module.exports = function(app) {
 
     if ('development' === env || 'test' === env) {
         app.use(morgan('dev'));
-        app.use(errorHandler);
+        app.use(errorHandler());
     }
 }

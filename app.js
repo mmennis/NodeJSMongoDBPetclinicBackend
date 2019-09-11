@@ -1,13 +1,12 @@
 /**
  * Basic server 
  */
-
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const express = require('express');
 const config = require('./config/environment/config');
 const mongoose = require('mongoose');
-
+const allRoutes = require('./routes.js');
 const expressConfig = require('./config/express');
 
 const PORT = 4100;
@@ -27,7 +26,12 @@ console.log(`Connected to MongoDB ${config.db.URI}`);
 const app = express();
 expressConfig(app);
 
+// Register all routes from local routes.js file
+allRoutes(app);
 
+app.get('/', function(req, res) {
+    res.send('Hello World!!');
+});
 
 app.listen(PORT, function() {
     console.log(`Server is listening on port ${PORT} in ${app.get('env')} mode`);
