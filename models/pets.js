@@ -6,6 +6,10 @@ const VisitSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    reason: {
+        type: String,
+        required: true,
+    },
     vet: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vet'
