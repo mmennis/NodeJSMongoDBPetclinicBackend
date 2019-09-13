@@ -1,7 +1,7 @@
 let local = require('../local.env');
 
 module.exports = {
-    DEBUG: '*',
+    DEBUG: '',
     port: 4100,
     ip: '0.0.0.0',
     seedDB: true,
@@ -9,6 +9,6 @@ module.exports = {
         url: 'http://localhost:80'
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic_dev',
+        URI: 'mongodb://localhost:27017/petclinic',
     }
 };

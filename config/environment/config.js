@@ -34,6 +34,6 @@ let config = {
 // _ is lodash lib for merging maps.
 module.exports = _.merge(
     config,
-    require('./' + process.env.NODE_ENV + '.js') || {},
-    require('../local.env')
+    require('../local.env'),
+    require('./' + process.env.NODE_ENV + '.js') || {}
 );

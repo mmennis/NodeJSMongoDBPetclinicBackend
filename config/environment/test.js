@@ -9,6 +9,6 @@ module.exports = {
         url: 'http://localhost:80'
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic_dev',
+        URI: 'mongodb://localhost:27017/petclinic_test',
     }
 };
