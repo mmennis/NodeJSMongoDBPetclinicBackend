@@ -1,21 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const VisitSchema = new Schema({
-    visit_date: {
-        type: Date,
-        default: Date.now,
-    },
-    reason: {
-        type: String,
-        required: true,
-    },
-    vet: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vet'
-    }
-});
-
 const PetSchema = new Schema({
     name: {
         type: String,
@@ -29,7 +14,22 @@ const PetSchema = new Schema({
         type: String,
         required: true
     },
-    visits: [VisitSchema]
+    visits: [
+        {
+            visit_date: {
+                type: Date,
+                default: Date.now,
+            },
+            reason: {
+                type: String,
+                required: true,
+            },
+            vet: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Vet'
+            }
+        }
+    ]
 }, {
     toJSON: {
         virtuals: true,

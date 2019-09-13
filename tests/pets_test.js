@@ -18,7 +18,7 @@ describe('Pets model', () => {
         });
         owner.save()
             .then(() => {
-                console.log('Pets before each save owner');
+                //console.log('Pets before each save owner');
                 done();
             })
             .catch((err) => {
@@ -40,12 +40,13 @@ describe('Pets model', () => {
                 done();
             }
             done();
-        })
+        });
+        
     });
 
     it('should save a pet with an owner but no visits ', (done) => {
         const pet = new Pet({
-            name: 'fido',
+            name: 'fido no visits',
             owner: owner,
             pet_type: 'dog'
         });
@@ -54,6 +55,38 @@ describe('Pets model', () => {
                 //console.log('Saved pet');
                 assert(!pet.isNew);
                 done();
+            })
+            .catch((err) => {
+                console.error(`Problem saving the pet ${err}`);
+                done();
+            });
+    });
+
+    it('should save a pet with owner and visits', (done) => {
+        const pet = new Pet({
+            name: 'fido with visits',
+            owner: owner,
+            pet_type: 'dog',
+            visits: [
+                {
+                    visit_date: Date.now(),
+                    reason: 'Sore paw',
+                    vet: null,
+                }
+            ]
+        });
+        pet.save()
+            .then(() => {
+                assert(!pet.isNew);
+                Pet.findById(pet._id)
+                    .then((savedPet) => {
+                        assert((pet._id).equals(savedPet._id));
+                        done();
+                    })
+                    .catch((err) => {
+                        console.log(`CREATE with visits - problem ${err}`);
+                        done();
+                    });
             })
             .catch((err) => {
                 console.error(`Problem saving the pet ${err}`);
