@@ -4,7 +4,7 @@ module.exports = {
     DEBUG: '*',
     port: 4100,
     ip: '0.0.0.0',
-    seedDB: true,
+    seedDB: false,
     webApp: {
         url: 'http://localhost:80'
     },
