@@ -1,12 +1,12 @@
 const assert = require("assert");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server=require("../app");
+const server=require("../../app");
 const should = chai.should();
 chai.use(chaiHttp);
 const faker = require('faker');
 
-const Owner = require('../models/owners');
+const Owner = require('../../models/owners');
 
 describe('Owners REST api routes', () => {
 
@@ -26,7 +26,7 @@ describe('Owners REST api routes', () => {
     })
 
     afterEach((done) => {
-        Owner.findByIdAndDelete(owner._id, (err) => {
+        Owner.findByIdAndRemove(owner._id, (err) => {
             if (err) {
                 console.error(`AFTER each - ${err}`);
             }
@@ -40,7 +40,7 @@ describe('Owners REST api routes', () => {
             .end((err, result) => {
                 assert(result.status === 200);
                 assert(result.body.data.length > 0);
-                assert(JSON.stringify(result.body.data[0]._id) === JSON.stringify(owner._id) );
+                assert((owner._id).equals(result.body.data[0]._id))
                 done();
             });
     })

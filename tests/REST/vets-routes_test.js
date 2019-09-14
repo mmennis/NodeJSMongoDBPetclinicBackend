@@ -1,12 +1,12 @@
 const assert = require('assert');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../app');
+const server = require('../../app');
 const faker = require('faker');
 const should = chai.should();
 chai.use(chaiHttp);
 
-const Vet = require('../models/vets');
+const Vet = require('../../models/vets');
 
 
 describe('Vets REST api routes', () => {
@@ -29,7 +29,7 @@ describe('Vets REST api routes', () => {
     })
 
     afterEach((done) => {
-        Vet.findByIdAndDelete(vet._id, (err) => {
+        Vet.findByIdAndRemove(vet._id, (err) => {
             if (err) {
                 console.error(`AFTER each - ${err}`);
             }

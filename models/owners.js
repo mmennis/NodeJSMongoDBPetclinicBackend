@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Pet = require('./pets');
 
 var OwnerSchema = new Schema({
     first_name: {
@@ -39,6 +40,10 @@ var OwnerSchema = new Schema({
         setters: true
     }
 });
+
+OwnerSchema.pre('deleteMany', { query: true, document: true }, function(next) {
+    Pet.deleteMany({ owner: this._id}, next);
+})
 
 OwnerSchema.index({ last_name: 1, type: -1 });
 OwnerSchema.index({ state: 1, type: -1 });

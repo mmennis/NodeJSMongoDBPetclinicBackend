@@ -1,6 +1,6 @@
 const assert = require('assert');
-const helper = require('./test_helper')
-const Vet = require('../models/vets');
+const helper = require('../test_helper')
+const Vet = require('../../models/vets');
 const faker = require('faker');
 
 describe('Vets model', () => {
@@ -18,16 +18,11 @@ describe('Vets model', () => {
             telephone: faker.phone.phoneNumber,
             specialty: 'surgery'
         });
-        Vet.deleteMany({}, (err) => {
-            if (err) {
-                console.error(`CLEANUP before - ${err}`);
-            }
-            done();
-        });
-    })
+        done();
+    });
 
     afterEach((done) => {
-        Vet.findByIdAndDelete(vet._id, (err) => {
+        Vet.findByIdAndRemove(vet._id, (err) => {
             if (err) {
                 console.error(`AFTER all - ${err}`);
             }
@@ -35,7 +30,7 @@ describe('Vets model', () => {
         });
     })
 
-    it('should crate a vet', (done) => {
+    it('should create a vet', (done) => {
         vet.save()
             .then(() => {
                 assert(!vet.isNew)
@@ -90,6 +85,26 @@ describe('Vets model', () => {
                 .catch((err) => {
                     console.error(`FIND by id - ${err}`);
                 });
+        })
+
+        it('should update a vet', (done) => {
+            assert(vet.last_name !== 'UpdatedName');
+            Vet.findByIdAndUpdate(vet._id, {last_name: 'UpdatedName'} ,{ new :true}, (err, res) => {
+                if(err) { console.error(`UPDATE - ${err}`)}
+                assert((vet._id).equals(res._id));
+                assert(res.last_name = 'UpdatedName');
+                done();
+            })
+        })
+
+        it('should remove a vet by id', (done) => {
+            Vet.deleteOne({ '_id': vet._id }, (err) => {
+                if (err) { console.error(`DELETE by id ${err}`)}
+                Vet.findById(vet._id, (err, res) => {
+                    assert(res === null)
+                    done();
+                })
+            })
         })
 
     });

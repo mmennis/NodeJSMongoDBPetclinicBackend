@@ -1,7 +1,7 @@
 const assert = require('assert');
-const helper = require('./test_helper');
-const Owner = require('../models/owners');
-const Pet = require('../models/pets');
+const helper = require('../test_helper');
+const Owner = require('../../models/owners');
+const Pet = require('../../models/pets');
 
 describe('Pets model', () => {
 
@@ -29,20 +29,12 @@ describe('Pets model', () => {
     })
 
     afterEach((done) => {
-        Owner.deleteMany({}, (err) => {
-            if(err) {
-                console.error(`Problem deleteing existing owners ${err}`);
-                done();
-            }
-        });
-        Pet.deleteMany({}, (err) => {
+        Owner.findByIdAndRemove(owner._id, function(err, res) {
             if (err) {
-                console.error(`Problem deleting the pets from the database ${err}`);
-                done();
+                console.error(`AFTER each - ${err}`)
             }
             done();
         });
-        
     });
 
     it('should save a pet with an owner but no visits ', (done) => {
@@ -83,8 +75,6 @@ describe('Pets model', () => {
             });
     });
 
-    
-
     describe('with pets and visits', () => {
         let pet;
         beforeEach((done) => {
@@ -111,6 +101,41 @@ describe('Pets model', () => {
                 });
         })
 
+        afterEach((done) => {
+            Pet.deleteMany({}, function(err, res) {
+                if (err) {
+                    console.error(`AFTER each - ${err}`);
+                }
+                done();
+            });
+        });
+
+        it('should find a pet by name', (done) => {
+            Pet.find({ name: pet.name }, (err, results) => {
+                if(err) { console.log(`FIND by name - ${err}`)}
+                assert(results.length > 0);
+                assert(results[0].name === pet.name);
+                done();
+            })
+        })
+
+        it('should find all pets', (done) => {
+            Pet.find({}, (err, results) => {
+                if(err) { console.log(`FIND all - ${err}`)}
+                assert(results.length > 0);
+                assert(results[0].name === pet.name);
+                done();
+            });
+        })
+
+        it('should find pet by id', (done) => {
+            Pet.findById(pet._id, (err, result) => {
+                if(err) { console.log(`FIND by id - ${err}`)}
+                assert((pet._id).equals(result._id));
+                done();
+            })
+        })
+
         it('should save a pet with owner and visits', (done) => {
             Pet.findById(pet._id)
                 .then((savedPet) => {
@@ -122,7 +147,43 @@ describe('Pets model', () => {
                     console.log(`CREATE with visits - ${err}`);
                     done();
                 });
-        });    
+        });  
+        
+        it('should remove a pet by id', (done) => {
+            Pet.findByIdAndRemove(pet._id, (err, res) => {
+                if(err) {
+                    console.error(`REMOVE PET by id - ${err}`)
+                }
+                Pet.findById(pet._id, (err, res) => {
+                    assert(res === null);  // pet is now missing
+                })
+                done();
+            })
+        });
+
+        it('should update a pet', (done) => {
+            assert(pet.name !== 'Rover');
+            Pet.findByIdAndUpdate(pet._id, { name: 'Rover'}, { new: true }, (err, res) => {
+                assert(res.name === 'Rover');
+                assert((res._id).equals(pet._id));
+                done();
+            })
+        });
+
+        it('should update a pet with new visit', (done) => {
+            let visit = {
+                    visit_date: Date.now(),
+                    reason: 'blind',
+                    vet: null,
+            }
+            Pet.findByIdAndUpdate(pet._id, { $push: { visits: visit }}, { new: true }, (err, res) => {
+                if(err) { console.error(`UPDATE with new visit ${err}`)}
+                assert((res._id).equals(pet._id));
+                assert(res.visits.length > 1);
+                assert(res.visits[1].reason === 'blind');
+                done();
+            })
+        })
     });
 
 });

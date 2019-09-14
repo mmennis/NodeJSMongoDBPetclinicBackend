@@ -1,7 +1,7 @@
 const assert = require('assert');
-const helper = require('./test_helper');
-const Owner = require('../models/owners');
-const Pet = require('../models/pets');
+const helper = require('../test_helper');
+const Owner = require('../../models/owners');
+const Pet = require('../../models/pets');
 
 
 describe('Owner model', () => {
@@ -16,25 +16,19 @@ describe('Owner model', () => {
             address: '1600 Villa St Apt 140',
             city: 'Mountain View',
             state: 'CA',
-            telephone: '408-555-1212'
+            telephone: '408-555-1212',
+            pets: []
         });
-        Owner.deleteMany({}, (err) => {
-            if(err) {
-                console.error(`Problem deleteing existing owners ${err}`);
-                done();
-            }
-            Pet.deleteMany({}, (err) => {
-                if (err){
-                    console.error(`Problem deleting pets from database ${err}`);
-                    done();
-                }
-            })
-            done();
-        });
+        done();
     })
     
     afterEach((done) => {
-        done();
+        Owner.findByIdAndRemove(owner._id, (err) => {
+            if (err) {
+                console.error(`Problem deleting owner created - ${err}`);
+            }
+            done();
+        });
     });
 
     it('should create an owner with no pets', (done) => {
@@ -139,7 +133,7 @@ describe('Owner model', () => {
                 });
         });
 
-        it('should delete an owner', (done) => {
+        it('should Remove an owner', (done) => {
             Owner.findByIdAndRemove(owner._id)
                 .then((deletedOwner) => {
                     Owner.findById(owner._id)
@@ -159,15 +153,16 @@ describe('Owner model', () => {
     }); // with saved owners
 
     describe('with pets', () => {
-
         let pet;
 
         beforeEach((done) => {
-            Pet.deleteMany({}, (err) => {
-                if(err) {
-                    console.log(`Problem deleting all pets from database ${err}`);
-                    done();
-                }
+            owner.last_name = 'OwnerWithPet';
+            owner.save()
+            .then(() => {
+                assert(!owner.isNew);
+            })
+            .catch((err) => {
+                console.error(`Problem saving the owner ${err}`);
             });
             pet = new Pet({
                 name: 'fido',
@@ -176,13 +171,21 @@ describe('Owner model', () => {
             });
             pet.save()
                 .then(() => {
-                    //console.log('Saved pet for owner');
                     done();
                 })
                 .catch((err) => {
                     console.log(`Problem saving pet for owner ${err}`);
                     done();
                 });
+        })
+
+        afterEach((done) => {
+            Pet.deleteMany({}, (err) => {
+                if (err) {
+                    console.error(`Problem deleting pet - ${err}`);
+                }
+                done();
+            })
         })
 
         it('should create an owner with a pet', (done) => {
@@ -202,7 +205,80 @@ describe('Owner model', () => {
                 });
         });
 
-        
+        it('should delete an owner and pet', (done) => {
+            owner.pets = [],
+            owner.last_name = 'Petowner';
+            owner.pets.push(pet);
+            owner.save()
+                .then(() => {
+                    assert(!owner.isNew);
+                })
+                .catch((err) => {
+                    console.error(`Problem saving owner with pet ${err}`);
+                });
+           assert(owner !== null);
+           assert(pet !== null);
+           Owner.deleteMany({'_id' : owner._id}, (err) => {});
+           Pet.find({ owner: owner._id}, (p) => {
+               assert(p === null);
+           })
+           done();
+        });
+
+        it('should update with a new pet', (done) => {
+            assert(owner.pets.length === 0);
+            Owner.findByIdAndUpdate(owner._id, 
+                { $push: { pets: pet }}, 
+                { new : true},
+                (err, newOwner) => {
+                if(err) {
+                    console.log(`UPDATE with new pet - ${err}`);
+                }
+                assert(newOwner.pets.length > 0);    
+                assert((newOwner.pets[0]._id).equals(pet._id))
+            });
+            done();
+        });
     }); // with pets
+
+    describe('owner with pet', () => {
+
+        let pet;
+        beforeEach((done) => {
+            owner.last_name = 'OwnerWithPet';
+            pet = new Pet({
+                name: 'fido',
+                owner: owner,
+                pet_type: 'dog'
+            });
+            pet.save()
+                .then(() => {})
+                .catch((err) => { console.log(`Problem saving pet for owner ${err}`) });
+            done();
+        })
+
+        it.skip('should update owner to remove a pet by name', (done) => {
+            owner.pets.push(pet);
+            owner.save()
+                .then(() => {
+                    assert(!owner.isNew);
+                    done();
+                })
+                .catch((err) => { console.error(`Problem saving the owner ${err}`) });
+            console.log('BEFORE -> ' + owner);
+            //assert(owner.pets.length > 0);
+            Owner.findByIdAndUpdate(owner._id, 
+                { $pull: { pets: 
+                    { '_id': pet._id }
+                }}, 
+                { new : true },
+                (err, res) => {
+                    console.log('AFTER => ' + res);
+                    assert(res.pets.length === owner.pets.length -1);
+                    assert((owner._id).equals(res._id));
+                    done();
+            });
+        })
+    })
 
 });
