@@ -14,9 +14,6 @@ const seedDb = require('./helpers/seed-db');
 const PORT = config.port;
 //mongoose.set('useCreateIndex', true);
 
-// Dump configuration for start up check convenience
-seedDb();
-
 // Create connection to MongoDB database
 mongoose.Promise = global.Promise;
 mongoose.connect(config.db.URI, config.mongo.options);
@@ -25,6 +22,9 @@ mongoose.connection.on('error', function(err) {
     process.exit(1);
 });
 console.log(`Connected to MongoDB ${config.db.URI}`);
+
+// Dump configuration for start up check convenience
+seedDb();
 
 const app = express();
 expressConfig(app);
