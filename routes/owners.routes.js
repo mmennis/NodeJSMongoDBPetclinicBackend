@@ -12,4 +12,13 @@ router.get('/all', function(req, res) {
     });
 });
 
+router.get('/:id', function(req, res) {
+    Owner.findById(req.params.id, function(err, owner) {
+        if(err) {
+            res.status(500).json({ error: `Problem getting owner by if ${err}`});
+        }
+        res.status(200).json({ data: owner });
+    });
+});
+
 module.exports = router;
