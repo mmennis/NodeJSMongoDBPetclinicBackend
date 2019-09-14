@@ -24,8 +24,11 @@ let config = {
     seedDB: false,
     mongo: {
         options: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+            useNewUrlParser: true, 
+            useUnifiedTopology: true, 
+            connectTimeoutMS: 2000,
+            useCreateIndex: true,
+            useFindAndModify: false,
         }
     }
 }

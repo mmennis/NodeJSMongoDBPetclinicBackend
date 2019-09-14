@@ -12,6 +12,7 @@ const expressConfig = require('./config/express');
 const seedDb = require('./helpers/seed-db');
 
 const PORT = 4100;
+//mongoose.set('useCreateIndex', true);
 
 // Dump configuration for start up check convenience
 seedDb();
