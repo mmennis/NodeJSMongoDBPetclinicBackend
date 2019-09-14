@@ -10,6 +10,26 @@ const VetSchema = mongoose.Schema({
         type: String,
         required: true,
         index: true,
+    },
+    office_hours: {
+        type: String,
+        required: false
+    },
+    address: {
+        type: String,
+        required: true
+    },
+    city: {
+        type: String,
+        required: true
+    },
+    state: {
+        type: String,
+        required: true
+    },
+    telephone: {
+        type: String,
+        required: true,
     }
 }, {
     timestamps: true,

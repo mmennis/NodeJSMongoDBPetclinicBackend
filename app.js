@@ -9,10 +9,12 @@ const mongoose = require('mongoose');
 const allRoutes = require('./routes.js');
 const expressConfig = require('./config/express');
 
+const seedDb = require('./helpers/seed-db');
+
 const PORT = 4100;
 
 // Dump configuration for start up check convenience
-console.log(config);
+seedDb();
 
 // Create connection to MongoDB database
 mongoose.Promise = global.Promise;
