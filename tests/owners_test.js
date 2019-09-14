@@ -15,6 +15,7 @@ describe('Owner model', () => {
             last_name: 'Mennis',
             address: '1600 Villa St Apt 140',
             city: 'Mountain View',
+            state: 'CA',
             telephone: '408-555-1212'
         });
         Owner.deleteMany({}, (err) => {

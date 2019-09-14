@@ -8,9 +8,6 @@ module.exports = function(){
 // Use e26 style Promises
 mongoose.Promise = global.Promise;
 
-console.log(config);
-console.log(config.db.URI);
-
 mongoose.connect('mongodb://localhost:27017/petclinic_test', 
     { 
         useNewUrlParser: true, 

@@ -14,6 +14,7 @@ describe('Pets model', () => {
             last_name: 'Owner',
             address: '1234 Canine Lane',
             city: 'Dogtown',
+            state: 'CA',
             telephone: '408-555-1212'
         });
         owner.save()
