@@ -5,6 +5,11 @@ Database is MongoDB on localhost
 REST api for all interactions with frontend
 
 Steps to start:
-npm init
-npm start
 
+```
+$ npm init
+
+$ NODE_ENV=development npm start
+
+$ NODE_ENV=test npm run test
+```

@@ -16,6 +16,10 @@ const petTypes = contents.trim().split(',');
 contents = fs.readFileSync(__dirname + '/samples/vet_specialties.txt', 'UTF-8');
 const vetSpecialties = contents.trim().split(',');
 
+async function dropDatabase(name) {
+    await mongoose.connection.collection(name).drop();
+}
+
 module.exports = function() {
 
     console.log('------------------------------------------------');
@@ -26,10 +30,14 @@ module.exports = function() {
         console.log("Seeding is not permited");
         return;
     } else {
-        console.log('Dropping collections before re-seeding');
-        Vet.collection.drop();
-        Owner.collection.drop();
-        Pet.collection.drop();
+        try {
+            console.log('Dropping collections before re-seeding');
+            dropDatabase('vets');
+            dropDatabase('owners');
+            dropDatabase('pets');
+        } catch(err) {
+            console.error(`Probem dropping collections for seeding - ${err}`);
+        }
     }
 
     let vetIds = [];
