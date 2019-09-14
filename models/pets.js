@@ -40,5 +40,6 @@ const PetSchema = new Schema({
 });
 
 PetSchema.index({ owner: 1, name: 1, type: -1 });
+PetSchema.index({ "visits.vet": 1, type: -1 })
 
 module.exports = mongoose.model('Pet', PetSchema);

@@ -18,6 +18,10 @@ var OwnerSchema = new Schema({
         type: String,
         required: true
     },
+    state: {
+        type: String,
+        required: true,
+    },
     telephone: {
         type: String,
         required: true
@@ -37,5 +41,6 @@ var OwnerSchema = new Schema({
 });
 
 OwnerSchema.index({ last_name: 1, type: -1 });
+OwnerSchema.index({ state: 1, type: -1 });
 
 module.exports = mongoose.model('Owner', OwnerSchema);

@@ -30,9 +30,16 @@ const VetSchema = mongoose.Schema({
     telephone: {
         type: String,
         required: true,
+    },
+    specialty: {
+        type: String,
+        required: true,
     }
 }, {
     timestamps: true,
 });
+
+VetSchema.index({ last_name: 1, type: -1 });
+VetSchema.index({ state: 1, type: -1 });
 
 module.exports = mongoose.model('Vet', VetSchema);
