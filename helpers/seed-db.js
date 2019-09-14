@@ -1,28 +1,8 @@
 const config = require('../config/environment/config');
-const mongoose = require('mongoose');
 const Owner = require('../models/owners');
 const Pet = require('../models/pets');
 const Vet = require('../models/vets');
 const faker = require('faker');
-const cloneDeep = require('lodash/cloneDeep');
-
-async function getAllVets() {
-    var prom = Vet.find({})
-        .exec()
-        .catch((err) => { console.log(`GetAllVets - ${err}`)});
-    await delay();
-    return await prom
-}
-
-function delay() {
-    // `delay` returns a promise
-    return new Promise(function(resolve, reject) {
-        // Only `delay` is able to resolve or reject the promise
-        setTimeout(function() {
-        resolve(42); // After 3 seconds, resolve the promise with value 42
-        }, 3000);
-    });
-}
 
 module.exports = function() {
     if (!config.seedDB) {
