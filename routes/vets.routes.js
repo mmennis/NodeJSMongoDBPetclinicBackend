@@ -15,7 +15,8 @@ router.get('/all', function(req, res) {
 router.get('/:id', function(req, res) {
     Vet.findById(req.params.id, (err, vet) => {
         if(err) {
-            res.status(500).json({ error: `Problem getting vet by id ${err}`})
+            res.status(404).json({ error: `Problem getting vet by id ${err}`});
+            return;
         }
         res.status(200).json({ data: vet });
     })

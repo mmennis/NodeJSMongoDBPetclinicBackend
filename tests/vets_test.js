@@ -26,6 +26,15 @@ describe('Vets model', () => {
         });
     })
 
+    afterEach((done) => {
+        Vet.findByIdAndDelete(vet._id, (err) => {
+            if (err) {
+                console.error(`AFTER all - ${err}`);
+            }
+            done();
+        });
+    })
+
     it('should crate a vet', (done) => {
         vet.save()
             .then(() => {

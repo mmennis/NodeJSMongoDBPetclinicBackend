@@ -11,7 +11,7 @@ const expressConfig = require('./config/express');
 
 const seedDb = require('./helpers/seed-db');
 
-const PORT = 4100;
+const PORT = config.port;
 //mongoose.set('useCreateIndex', true);
 
 // Dump configuration for start up check convenience
@@ -39,3 +39,5 @@ app.get('/', function(req, res) {
 app.listen(PORT, function() {
     console.log(`Server is listening on port ${PORT} in ${app.get('env')} mode`);
 });
+
+module.exports = app;

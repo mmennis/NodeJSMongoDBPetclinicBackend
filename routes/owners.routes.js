@@ -15,7 +15,8 @@ router.get('/all', function(req, res) {
 router.get('/:id', function(req, res) {
     Owner.findById(req.params.id, function(err, owner) {
         if(err) {
-            res.status(500).json({ error: `Problem getting owner by if ${err}`});
+            res.status(404).json({ error: `Problem getting owner by if ${err}`});
+            return;
         }
         res.status(200).json({ data: owner });
     });

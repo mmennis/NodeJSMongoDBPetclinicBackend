@@ -2,7 +2,7 @@ let local = require('../local.env');
 
 module.exports = {
     DEBUG: '*',
-    port: 4100,
+    port: 4101,
     ip: '0.0.0.0',
     seedDB: false,
     webApp: {
