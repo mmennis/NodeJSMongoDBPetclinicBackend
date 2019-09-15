@@ -39,7 +39,7 @@ describe('Vets REST api routes', () => {
 
     it('should GET all', (done) => {
         chai.request(server)
-            .get('/vets/all')
+            .get('/vets/')
             .end((err, result) => {
                 assert(result.status === 200);
                 assert(result.body.data.length > 0);
@@ -58,7 +58,7 @@ describe('Vets REST api routes', () => {
             });
     });
 
-    it('return a 500 when no id match', (done) =>{
+    it('return a 404 when no id match', (done) =>{
         chai.request(server)
             .get('/vets/123456')
             .end((err, result) => {

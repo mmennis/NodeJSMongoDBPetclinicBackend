@@ -22,6 +22,9 @@ let config = {
     port: process.env.PORT || 4100,
     ip: process.env.IP || '0.0.0.0',
     seedDB: false,
+    mongoose: {
+        debug: false
+    },
     mongo: {
         options: {
             useNewUrlParser: true, 

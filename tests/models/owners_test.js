@@ -3,6 +3,7 @@ const helper = require('../test_helper');
 const Owner = require('../../models/owners');
 const Pet = require('../../models/pets');
 
+const faker = require('faker');
 
 describe('Owner model', () => {
 
@@ -11,12 +12,12 @@ describe('Owner model', () => {
     beforeEach((done) => {
         helper();
         owner = new Owner({
-            first_name: 'Michael',
-            last_name: 'Mennis',
-            address: '1600 Villa St Apt 140',
-            city: 'Mountain View',
-            state: 'CA',
-            telephone: '408-555-1212',
+            first_name: faker.name.firstName(),
+            last_name: faker.name.lastName(),
+            address: faker.address.streetAddress(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            telephone: faker.phone.phoneNumber(),
             pets: []
         });
         done();
@@ -241,41 +242,55 @@ describe('Owner model', () => {
         });
     }); // with pets
 
-    describe('owner with pet', () => {
-
-        let pet;
+    describe('testing removal of visits', () => {
+        let pt;
+        let ownr
         beforeEach((done) => {
-            owner.last_name = 'OwnerWithPet';
-            pet = new Pet({
+            ownr = new Owner({
+                first_name: faker.name.firstName(),
+                last_name: faker.name.lastName(),
+                address: faker.address.streetAddress(),
+                city: faker.address.city(),
+                state: faker.address.stateAbbr(),
+                telephone: faker.phone.phoneNumber(),
+                pets: []
+            });
+            pt = new Pet({
                 name: 'fido',
                 owner: owner,
                 pet_type: 'dog'
             });
-            pet.save()
-                .then(() => {})
-                .catch((err) => { console.log(`Problem saving pet for owner ${err}`) });
-            done();
-        })
-
-        it.skip('should update owner to remove a pet by name', (done) => {
-            owner.pets.push(pet);
-            owner.save()
+            pt.save()
                 .then(() => {
-                    assert(!owner.isNew);
+                    assert(!pt.isNew);
+                })
+                .catch((err) => { console.log(`Problem saving pet for ownr ${err}`) });
+            ownr.pets = [];
+            ownr.pets.push(pt);
+            ownr.save()
+                .then(() => {
+                    assert(!ownr.isNew);
                     done();
                 })
                 .catch((err) => { console.error(`Problem saving the owner ${err}`) });
-            console.log('BEFORE -> ' + owner);
-            //assert(owner.pets.length > 0);
-            Owner.findByIdAndUpdate(owner._id, 
-                { $pull: { pets: 
-                    { '_id': pet._id }
-                }}, 
-                { new : true },
+        })
+        
+        afterEach((done) => {
+            Owner.deleteMany({}, (err) => { if (err) console.error(`After each $[err]`)});
+            Pet.deleteMany({}, (err) => { if(err) console.error(`AFTER each ${err}`) });
+            done();
+        })
+
+        // FIXME: No idea why this doesn't work
+        it.skip('should update owner to remove a pet by id', (done) => {
+            const ptId = ownr.pets[0]._id;
+            Owner.findByIdAndUpdate(ownr._id, 
+                { $pull: { pets: { $elemMatch: { _id: ptId } } } }, 
+                { new : true, safe: true },
                 (err, res) => {
-                    console.log('AFTER => ' + res);
-                    assert(res.pets.length === owner.pets.length -1);
-                    assert((owner._id).equals(res._id));
+                    if(err) { console.error(`FIND by id update ${err}`)}
+                    //assert(res.pets.length === ownr.pets.length -1);
+                    assert((ownr._id).equals(res._id));
                     done();
             });
         })

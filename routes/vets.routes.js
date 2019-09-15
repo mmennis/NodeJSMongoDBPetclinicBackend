@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Vet = require('../models/vets');
 
-router.get('/all', function(req, res) {
+router.get('/', function(req, res) {
     Vet.find({}, (err, vets) => {
         if (err) {
             res.status(500).json({ error: `Problem all vets - ${err}`});

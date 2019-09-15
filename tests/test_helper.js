@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('events').EventEmitter.defaultMaxListeners = 0;
 const config = require('../config/environment/config');
 mongoose.set('useCreateIndex', true);
+mongoose.set('debug', config.mongoose.debug);
 
 module.exports = function(){
     // Use e26 style Promises

@@ -45,6 +45,10 @@ OwnerSchema.pre('deleteMany', { query: true, document: true }, function(next) {
     Pet.deleteMany({ owner: this._id}, next);
 })
 
+OwnerSchema.pre('deleteOne', { query: true, document: true }, function(next) {
+    Pet.deleteMany({ owner: this._id}, next);
+})
+
 OwnerSchema.index({ last_name: 1, type: -1 });
 OwnerSchema.index({ state: 1, type: -1 });
 

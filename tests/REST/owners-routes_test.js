@@ -36,7 +36,7 @@ describe('Owners REST api routes', () => {
 
     it('should GET all', (done) => {
         chai.request(server)
-            .get('/owners/all')
+            .get('/owners/')
             .end((err, result) => {
                 assert(result.status === 200);
                 assert(result.body.data.length > 0);
@@ -45,11 +45,21 @@ describe('Owners REST api routes', () => {
             });
     })
 
-    it('return a 500 when no id match', (done) =>{
+    it('return a 404 when no id match', (done) =>{
         chai.request(server)
             .get('/owners/123456')
             .end((err, result) => {
                 assert(result.status === 404);
+                done();
+            })
+    })
+
+    it('should return a 200 when id is matched', (done) => {
+        chai.request(server)
+            .get('/owners/' + owner._id)
+            .end((err, result) => {
+                assert(result.status === 200);
+                assert(JSON.stringify(result.body.data._id) === JSON.stringify(owner._id) );
                 done();
             })
     })

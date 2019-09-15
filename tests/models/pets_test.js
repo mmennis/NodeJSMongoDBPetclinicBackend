@@ -176,13 +176,28 @@ describe('Pets model', () => {
                     reason: 'blind',
                     vet: null,
             }
-            Pet.findByIdAndUpdate(pet._id, { $push: { visits: visit }}, { new: true }, (err, res) => {
+            Pet.findByIdAndUpdate(pet._id, 
+                { $push: { visits: visit }}, 
+                { new: true }, 
+                (err, res) => {
                 if(err) { console.error(`UPDATE with new visit ${err}`)}
                 assert((res._id).equals(pet._id));
                 assert(res.visits.length > 1);
                 assert(res.visits[1].reason === 'blind');
                 done();
             })
+        })
+
+        it('should update a pet to remove a visit', (done) => {
+            const visitId = pet.visits[0]._id ;
+            Pet.findByIdAndUpdate(pet._id, 
+                { $pull: { visits: { $elemMatch: { _id : visitId } } } }, 
+                { new: true, safe: true }, 
+                (err, res) => {
+                    if(err) { console.error(`UPDATE remove visit ${err}`)}
+                    assert(res.visits.length === 0);
+                    done();
+                });
         })
     });
 
