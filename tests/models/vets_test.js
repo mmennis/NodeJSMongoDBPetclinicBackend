@@ -15,7 +15,7 @@ describe('Vets model', () => {
             address: faker.address.streetAddress(),
             city: faker.address.city(),
             state: faker.address.stateAbbr(),
-            telephone: faker.phone.phoneNumber,
+            telephone: faker.phone.phoneNumber(),
             specialty: 'surgery'
         });
         done();

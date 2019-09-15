@@ -22,4 +22,17 @@ router.get('/:id', function(req, res) {
     });
 });
 
+router.post('/', function(req, res) {
+    let ownerData = req.body;
+    let owner = new Owner(ownerData);
+    owner.save()
+        .then(() => {
+            res.status(201).json({ msg: 'Owner creation successful', id: owner._id })
+        })
+        .catch((err) => {
+            let msg = `Problem creating new owner: ${err}`;
+            if (err) { console.error(msg)}
+            res.status(404).json({ error: msg });
+        })
+});
 module.exports = router;

@@ -22,4 +22,18 @@ router.get('/:id', function(req, res) {
     })
 });
 
+router.post('/', function(req, res) {
+    let vetData = req.body;
+    let vet = new Vet(vetData);
+    vet.save()
+        .then(() => {
+            res.status(201).json({ msg: 'Vet creation successful', id: vet._id});
+            return;
+        })
+        .catch((err) => { 
+            let msg = `Problem creating a new vet - ${err}`;
+            res.status(404).json({ error: msg });
+        })
+})
+
 module.exports = router;

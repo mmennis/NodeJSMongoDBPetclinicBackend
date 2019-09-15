@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const Pet = require('../models/pets');
 
@@ -20,6 +21,20 @@ router.get('/:id', function(req, res) {
         }
         res.status(200).json({ data: pet });
     })
+});
+
+router.post('/', function(req, res) {
+    let petData = req.body;
+    let pet = new Pet(petData);
+    pet.save()
+        .then(() => {
+            res.status(201).json({ msg: 'Pet create sucessfully', id: pet._id});
+            return;
+        })
+        .catch((err) => {
+            if (err) { console.error('POST pet ' + err) }
+            res.status(404).json({ error: err })
+        });
 });
 
 module.exports = router;
