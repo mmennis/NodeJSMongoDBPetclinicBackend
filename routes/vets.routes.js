@@ -36,4 +36,23 @@ router.post('/', function(req, res) {
         })
 })
 
+router.put('/:id', function(req, res) {
+    let vetData = req.body;
+    let vetId = req.params.id;    
+    Vet.findByIdAndUpdate(vetId, 
+        vetData, 
+        { new: true }, 
+        (err, result) => {
+            if(err) {
+                let msg =  `Problem updating Vet: ${err}`;
+                res.status(404).json({ error: msg });
+            }
+            res.status(201).json({ 
+                msg: 'Update successful',
+                data: result
+            })
+    })
+    
+})
+
 module.exports = router;

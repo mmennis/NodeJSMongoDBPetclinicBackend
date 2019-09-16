@@ -104,4 +104,35 @@ describe('Vets REST api routes', () => {
                 })
         })
     })
+
+    describe('PUT vet data', () => {
+        beforeEach(() => {
+
+        })
+
+        afterEach(() => {
+
+        })
+
+        it.only('should update a single field correctly', (done) => {
+            let newVetData = {
+                last_name: faker.name.lastName(),
+                first_name: faker.name.firstName(),
+                specialty: 'BOUNCING!!!',
+            }
+            chai.request(server)
+                .put('/vets/' + vet._id)
+                .type('json')
+                .send(newVetData)
+                .end((err, res) => {
+                    if (err) { console.log(`PUT problem ${err}`)}
+                    assert(res.status === 201);
+                    assert((vet._id).equals(res.body.data._id))
+                    assert(newVetData.last_name === res.body.data.last_name);
+                    assert(newVetData.specialty === res.body.data.specialty);
+                    done();
+                })
+        })
+
+    })
 });

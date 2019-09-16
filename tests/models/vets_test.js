@@ -89,7 +89,7 @@ describe('Vets model', () => {
 
         it('should update a vet', (done) => {
             assert(vet.last_name !== 'UpdatedName');
-            Vet.findByIdAndUpdate(vet._id, {last_name: 'UpdatedName'} ,{ new :true}, (err, res) => {
+            Vet.findByIdAndUpdate(vet._id, {last_name: 'UpdatedName'} ,{ new : true}, (err, res) => {
                 if(err) { console.error(`UPDATE - ${err}`)}
                 assert((vet._id).equals(res._id));
                 assert(res.last_name = 'UpdatedName');
