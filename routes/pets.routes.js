@@ -35,6 +35,7 @@ router.post('/', function(req, res) {
         .catch((err) => {
             if (err) { console.error('POST pet ' + err) }
             res.status(404).json({ error: err })
+            return;
         });
 });
 

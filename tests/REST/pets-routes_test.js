@@ -135,6 +135,20 @@ describe('Pets REST api routes', () => {
                     done();
                 })
         })
+
+        it.only('should fail to create if a field is invalid', (done) => {
+            petData.name = null;
+            chai.request(server)
+                .post('/pets/')
+                .type('json')
+                .send(petData)
+                .end((err, result) => {
+                    assert(result.body.error.name.includes('ValidationError'));
+                    assert(result.status === 404);
+                    if(err) { console.error(`POST create pet error: ${err}`)}
+                    done();
+                })
+        })
     })
 
     describe('PUT pet data', () => {
