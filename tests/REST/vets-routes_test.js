@@ -134,5 +134,23 @@ describe('Vets REST api routes', () => {
                 })
         })
 
+        it.only('should fail to update if update is invalid', (done) => {
+            let newVetData = {
+                last_name: faker.name.lastName(),
+                first_name: faker.name.firstName(),
+                specialty: null
+            }
+            chai.request(server)
+                .put('/vets/' + vet._id)
+                .type('json')
+                .send(newVetData)
+                .end((err, res) => {
+                    if (err) { console.log(`PUT problem ${err}`) }
+                    assert(res.status === 404);
+                    assert(res.body.error.includes('ValidationError'));
+                    done();
+                })
+        })
+
     })
 });

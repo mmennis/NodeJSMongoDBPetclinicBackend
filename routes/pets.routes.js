@@ -48,6 +48,7 @@ router.put('/:id', function(req, res) {
             if (err) {
                 let msg = `Problem updating pet ${err}`;
                 res.status(404).json({ error: msg })
+                return;
             }
             res.status(201).json({
                 msg: 'Update successful',

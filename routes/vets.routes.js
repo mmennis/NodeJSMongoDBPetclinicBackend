@@ -41,11 +41,12 @@ router.put('/:id', function(req, res) {
     let vetId = req.params.id;    
     Vet.findByIdAndUpdate(vetId, 
         vetData, 
-        { new: true }, 
+        { new: true, runValidators: true }, 
         (err, result) => {
             if(err) {
                 let msg =  `Problem updating Vet: ${err}`;
                 res.status(404).json({ error: msg });
+                return;
             }
             res.status(201).json({ 
                 msg: 'Update successful',
