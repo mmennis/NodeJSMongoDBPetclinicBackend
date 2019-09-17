@@ -136,7 +136,7 @@ describe('Pets REST api routes', () => {
                 })
         })
 
-        it.only('should fail to create if a field is invalid', (done) => {
+        it('should fail to create if a field is invalid', (done) => {
             petData.name = null;
             chai.request(server)
                 .post('/pets/')
