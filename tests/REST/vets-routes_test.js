@@ -134,7 +134,7 @@ describe('Vets REST api routes', () => {
                 })
         })
 
-        it.only('should fail to update if update is invalid', (done) => {
+        it('should fail to update if update is invalid', (done) => {
             let newVetData = {
                 last_name: faker.name.lastName(),
                 first_name: faker.name.firstName(),

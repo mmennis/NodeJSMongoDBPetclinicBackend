@@ -7,6 +7,7 @@ router.get('/', function(req, res) {
     Owner.find({}, function(err, owners) {
         if (err) {
             res.status(500).json({ error: `Problem with owners data ${err}` })
+            return;
         }
         res.status(200).json({ data: owners });
     });

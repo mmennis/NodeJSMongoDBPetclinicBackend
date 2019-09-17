@@ -7,6 +7,7 @@ router.get('/', function(req, res) {
     Vet.find({}, (err, vets) => {
         if (err) {
             res.status(500).json({ error: `Problem all vets - ${err}`});
+            return;
         }
         res.status(200).json({ data: vets });
     });
