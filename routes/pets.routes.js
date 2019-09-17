@@ -37,4 +37,23 @@ router.post('/', function(req, res) {
         });
 });
 
+router.put('/:id', function(req, res) {
+    let petId = req.params.id;
+    let petData = req.body;
+    console.log(`RECEIVED ${JSON.stringify(petData)}`)
+    Pet.findByIdAndUpdate(petId, 
+        petData,
+        { new: true },
+        (err, result) => {
+            if (err) {
+                let msg = `Problem updating pet ${err}`;
+                res.status(404).json({ error: msg })
+            }
+            res.status(201).json({
+                msg: 'Update successful',
+                data: result
+            })
+        })
+});
+
 module.exports = router;

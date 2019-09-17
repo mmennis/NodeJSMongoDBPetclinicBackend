@@ -15,9 +15,13 @@ describe('Pets REST api routes', () => {
     let owner;
     let pet;
     let vet;
+
     let petData;
+    let ownerData;
+    let vetData;
+
     beforeEach((done) => {
-        owner = new Owner({
+        ownerData = {
             first_name: faker.name.firstName(),
             last_name: faker.name.lastName(),
             address: faker.address.streetAddress(),
@@ -25,8 +29,9 @@ describe('Pets REST api routes', () => {
             state: faker.address.stateAbbr(),
             telephone: faker.phone.phoneNumber(),
             pets: []
-        });
-        vet = new Vet({
+        };
+        owner = new Owner(ownerData);
+        vetData = {
             first_name: faker.name.firstName(),
             last_name: faker.name.lastName(),
             office_hours: '8:00 AM - 5:00 PM',
@@ -35,7 +40,8 @@ describe('Pets REST api routes', () => {
             state: faker.address.stateAbbr(),
             telephone: faker.phone.phoneNumber,
             specialty: 'surgery'
-        });
+        };
+        vet = new Vet(vetData);
         petData = {
             name: 'fido',
             owner: owner,
@@ -130,4 +136,32 @@ describe('Pets REST api routes', () => {
                 })
         })
     })
+
+    describe('PUT pet data', () => {
+        beforeEach(() => {
+        })
+
+        afterEach(() => {
+        })
+
+        it('should update a pet field', (done) => {
+            let newPetData = {
+                pet_type: 'lizard',
+                name: 'benny'
+            };
+            chai.request(server)
+                .put('/pets/' + pet._id)
+                .type('json')
+                .send(newPetData)
+                .end((err, res) => {
+                    if (err) { console.error(`PUT pet ${err}`)}
+                    assert(res.status === 201);
+                    assert((pet._id).equals(res.body.data._id))
+                    assert(res.body.data.pet_type === newPetData.pet_type)
+                    assert(res.body.data.name === newPetData.name)
+                    done();
+                })
+        })
+    })
+
 })

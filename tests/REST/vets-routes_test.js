@@ -114,7 +114,7 @@ describe('Vets REST api routes', () => {
 
         })
 
-        it.only('should update a single field correctly', (done) => {
+        it('should update a single field correctly', (done) => {
             let newVetData = {
                 last_name: faker.name.lastName(),
                 first_name: faker.name.firstName(),
