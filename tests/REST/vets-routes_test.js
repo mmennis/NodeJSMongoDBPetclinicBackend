@@ -154,7 +154,7 @@ describe('Vets REST api routes', () => {
     })
 
     describe('DELETE vet data', () => {
-        it.only('should remove a vet by id', (done) => {
+        it('should remove a vet by id', (done) => {
             chai.request(server)
                 .delete('/vets/' + vet._id)
                 .end((err, response) => {
@@ -166,5 +166,19 @@ describe('Vets REST api routes', () => {
                     done();
                 })
         });
+
+        it.only('should fail to delete if id is invalid', (done) => {
+            chai.request(server)
+                .delete('/vets/' + 1234567)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE rest failed ${err}`) }
+                    assert(response.status === 404);
+                    let responseMsg = JSON.stringify(response.body.error);
+                    assert(responseMsg.includes('Cannot delete'));
+                    assert(responseMsg.includes('1234567'));
+                    assert(responseMsg.includes('CastError'));
+                    done();
+                })
+        })
     });
 });

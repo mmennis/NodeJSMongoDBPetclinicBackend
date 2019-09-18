@@ -61,8 +61,9 @@ router.delete('/:id', function(req, res, next) {
     let vetId = req.params.id;
     Vet.deleteOne({ '_id': vetId }, (err) => {
         if (err) {
-            Console.error(`DELETE vet problem ${err}`)
+            console.error(`DELETE vet problem ${err}`)
             res.status(404).json({ error: `Cannot delete ${vetId}: ${err}` })
+            return;
         }
         res.status(201).json({ msg: `Sucessfully removed vet id ${vetId}` })
     });
