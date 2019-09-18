@@ -154,7 +154,7 @@ describe('Owners REST api routes', () => {
     });
 
     describe('DELETE owner data', () => {
-        it.only('should delte an owner by id', (done) => {
+        it('should delte an owner by id', (done) => {
             let ownerId = owner._id;
             chai.request(server)
                 .delete('/owners/' + ownerId)
@@ -168,7 +168,7 @@ describe('Owners REST api routes', () => {
                 })
         });
 
-        it.only('should fail if id is not correct', (done) => {
+        it('should fail if id is not correct', (done) => {
             chai.request(server)
                 .delete('/owners/' + 1234567)
                 .end((err, response) => {
