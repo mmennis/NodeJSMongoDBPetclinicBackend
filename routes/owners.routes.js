@@ -15,8 +15,8 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
     Owner.findById(req.params.id, function(err, owner) {
-        if(err) {
-            res.status(404).json({ error: `Problem getting owner by if ${err}`});
+        if (err) {
+            res.status(404).json({ error: `Problem getting owner by if ${err}` });
             return;
         }
         res.status(200).json({ data: owner });
@@ -32,7 +32,7 @@ router.post('/', function(req, res) {
         })
         .catch((err) => {
             let msg = `Problem creating new owner: ${err}`;
-            if (err) { console.error(msg)}
+            if (err) { console.error(msg) }
             res.status(404).json({ error: msg });
         })
 });
@@ -40,9 +40,8 @@ router.post('/', function(req, res) {
 router.put('/:id', function(req, res, next) {
     let ownerId = req.params.id;
     let ownerUpdate = req.body;
-    Owner.findByIdAndUpdate(ownerId, 
-        ownerUpdate, 
-        { new: true, runValidators: true }, 
+    Owner.findByIdAndUpdate(ownerId,
+        ownerUpdate, { new: true, runValidators: true },
         (err, result) => {
             if (err) {
                 let message = `Problem updating the owner ${ownerId}: ${err}`;
@@ -56,5 +55,18 @@ router.put('/:id', function(req, res, next) {
             });
         });
 });
+
+router.delete('/:id', function(req, res, next) {
+    let ownerId = req.params.id;
+    Owner.deleteOne({ '_id': ownerId }, (err) => {
+        if (err) {
+            let message = `Problem deleting ${ownerId}: ${err}`;
+            console.error(message);
+            res.status(404).json({ error: message });
+            return;
+        }
+        res.status(201).json({ msg: `Successful delete ${ownerId}` });
+    });
+})
 
 module.exports = router;

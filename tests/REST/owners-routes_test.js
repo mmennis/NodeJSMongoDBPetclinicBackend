@@ -1,7 +1,7 @@
 const assert = require("assert");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const server=require("../../app");
+const server = require("../../app");
 const should = chai.should();
 chai.use(chaiHttp);
 const faker = require('faker');
@@ -31,10 +31,10 @@ describe('Owners REST api routes', () => {
 
     afterEach((done) => {
         Owner.deleteMany({}, (err) => {
-            if(err) { console.error(`AFTER each delete ${err}`)}
+            if (err) { console.error(`AFTER each delete ${err}`) }
         })
         Pet.deleteMany({}, (err) => {
-            if (err) { console.error(`AFTER each pet delete ${err}`)}
+            if (err) { console.error(`AFTER each pet delete ${err}`) }
             done();
         })
     })
@@ -51,8 +51,8 @@ describe('Owners REST api routes', () => {
                     done();
                 });
         })
-    
-        it('return a 404 when no id match', (done) =>{
+
+        it('return a 404 when no id match', (done) => {
             chai.request(server)
                 .get('/owners/123456')
                 .end((err, result) => {
@@ -60,21 +60,20 @@ describe('Owners REST api routes', () => {
                     done();
                 })
         })
-    
+
         it('should return a 200 when id is matched', (done) => {
             chai.request(server)
                 .get('/owners/' + owner._id)
                 .end((err, result) => {
                     assert(result.status === 200);
-                    assert(JSON.stringify(result.body.data._id) === JSON.stringify(owner._id) );
+                    assert(JSON.stringify(result.body.data._id) === JSON.stringify(owner._id));
                     done();
                 })
         })
     })
 
     describe('POST owner data', () => {
-        beforeEach(() => {
-        })
+        beforeEach(() => {})
 
         it('should create a new owner with no pets', (done) => {
             chai.request(server)
@@ -82,7 +81,7 @@ describe('Owners REST api routes', () => {
                 .type('form')
                 .send(ownerData)
                 .end((err, result) => {
-                    if(err) { console.error(`POST create -> ${err}`)}
+                    if (err) { console.error(`POST create -> ${err}`) }
                     assert(result.status === 201);
                     Owner.findById(result.body.id, (err, owner) => {
                         assert(owner.last_name === ownerData.last_name)
@@ -99,19 +98,17 @@ describe('Owners REST api routes', () => {
                 .type('form')
                 .send(ownerData)
                 .end((err, result) => {
-                    if(err) { console.error(`POST create -> ${err}`)}
+                    if (err) { console.error(`POST create -> ${err}`) }
                     assert(result.status === 404);
                     done();
                 })
         })
     });
 
-    describe('PUT owner updates', (done) => {
-        beforeEach(() => {
-        })
+    describe('PUT owner updates', () => {
+        beforeEach(() => {})
 
-        afterEach(() => {
-        })
+        afterEach(() => {})
 
         it('should change fields in the owner', (done) => {
             let update = {
@@ -147,7 +144,7 @@ describe('Owners REST api routes', () => {
                 .type('json')
                 .send(update)
                 .end((err, result) => {
-                    if (err) { console.error(`PUT new pet owner: ${err}`)}
+                    if (err) { console.error(`PUT new pet owner: ${err}`) }
                     assert(result.status === 201);
                     assert((owner._id).equals(result.body.data._id));
                     assert((pet._id).equals(result.body.data.pets[0]));
@@ -155,4 +152,34 @@ describe('Owners REST api routes', () => {
                 });
         })
     });
+
+    describe('DELETE owner data', () => {
+        it.only('should delte an owner by id', (done) => {
+            let ownerId = owner._id;
+            chai.request(server)
+                .delete('/owners/' + ownerId)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE owner ${err}`) }
+                    assert(response.status === 201);
+                    let responseMsg = JSON.stringify(response.body.msg);
+                    assert(responseMsg.includes('Successful delete'))
+                    assert(responseMsg.includes(owner._id));
+                    done();
+                })
+        });
+
+        it.only('should fail if id is not correct', (done) => {
+            chai.request(server)
+                .delete('/owners/' + 1234567)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE owner ${err}`) }
+                    assert(response.status === 404);
+                    let responseMsg = JSON.stringify(response.body.error);
+                    assert(responseMsg.includes('Problem deleting'));
+                    assert(responseMsg.includes('1234567'));
+                    assert(responseMsg.includes('CastError'));
+                    done();
+                })
+        });
+    })
 })

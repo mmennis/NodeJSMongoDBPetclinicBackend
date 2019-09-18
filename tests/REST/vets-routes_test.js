@@ -167,7 +167,7 @@ describe('Vets REST api routes', () => {
                 })
         });
 
-        it.only('should fail to delete if id is invalid', (done) => {
+        it('should fail to delete if id is invalid', (done) => {
             chai.request(server)
                 .delete('/vets/' + 1234567)
                 .end((err, response) => {
