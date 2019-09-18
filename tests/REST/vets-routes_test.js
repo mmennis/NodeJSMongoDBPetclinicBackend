@@ -94,7 +94,7 @@ describe('Vets REST api routes', () => {
         it('should fail to create if a required field is missing', (done) => {
             delete vetData['state']
             chai.request(server)
-                .post('/owners/')
+                .post('/vets/')
                 .type('form')
                 .send(vetData)
                 .end((err, result) => {

@@ -38,7 +38,7 @@ describe('Pets REST api routes', () => {
             address: faker.address.streetAddress(),
             city: faker.address.city(),
             state: faker.address.stateAbbr(),
-            telephone: faker.phone.phoneNumber,
+            telephone: faker.phone.phoneNumber(),
             specialty: 'surgery'
         };
         vet = new Vet(vetData);
@@ -162,7 +162,7 @@ describe('Pets REST api routes', () => {
             let newPetData = {
                 pet_type: 'lizard',
                 name: 'benny'
-            };
+            };   
             chai.request(server)
                 .put('/pets/' + pet._id)
                 .type('json')
@@ -175,6 +175,47 @@ describe('Pets REST api routes', () => {
                     assert(res.body.data.name === newPetData.name)
                     done();
                 })
+        })
+
+        //{ $pull: { visits: { $elemMatch: { _id : visitId } } } }, 
+        //{ $push: { visits: visit }}, 
+
+        it('should add a visit', (done) => {
+            let newVisit = {
+                visit_date: Date.now(),
+                reason: 'Dead',
+                vet: vet,
+            }
+            let update = { $push : { visits: newVisit }};
+            chai.request(server)
+                .put('/pets/' + pet._id)
+                .type('json')
+                .send(update)
+                .end((err, result) => {
+                    if(err) { console.error(`1PUT pet new visit ${err}`) }
+                    assert(result.status === 201);
+                    assert((pet._id).equals(result.body.data._id));
+                    assert(result.body.data.visits.length === pet.visits.length + 1);
+                    let addedVisit = result.body.data.visits[1];
+                    assert(addedVisit.reason === newVisit.reason);
+                    done();
+                })
+        })
+
+        it('should remove a visit', (done) => {
+            let visitId = pet.visits[0]._id;
+            let update = { $pull: { visits: { $elemMatch : { _id : visitId }}}};
+            chai.request(server)
+                .put('/pets/' + pet._id)
+                .type('json')
+                .send(update)
+                .end((err, result) => {
+                    assert(result.status === 201);
+                    assert((pet._id).equals(result.body.data._id));
+                    assert(result.body.data.visits.length === 0);
+                    done();
+                })
+
         })
     })
 

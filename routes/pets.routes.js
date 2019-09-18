@@ -42,7 +42,7 @@ router.post('/', function(req, res) {
 router.put('/:id', function(req, res) {
     let petId = req.params.id;
     let petData = req.body;
-    console.log(`RECEIVED ${JSON.stringify(petData)}`)
+    //console.log(`RECEIVED ${JSON.stringify(petData)}`)
     Pet.findByIdAndUpdate(petId, 
         petData,
         { new: true },
