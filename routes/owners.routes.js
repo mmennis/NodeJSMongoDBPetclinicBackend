@@ -36,4 +36,25 @@ router.post('/', function(req, res) {
             res.status(404).json({ error: msg });
         })
 });
+
+router.put('/:id', function(req, res, next) {
+    let ownerId = req.params.id;
+    let ownerUpdate = req.body;
+    Owner.findByIdAndUpdate(ownerId, 
+        ownerUpdate, 
+        { new: true, runValidators: true }, 
+        (err, result) => {
+            if (err) {
+                let message = `Problem updating the owner ${ownerId}: ${err}`;
+                console.error(message);
+                res.status(404).json({ error: message });
+                return;
+            }
+            res.status(201).json({
+                msg: 'Update successful',
+                data: result,
+            });
+        });
+});
+
 module.exports = router;

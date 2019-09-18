@@ -7,6 +7,7 @@ chai.use(chaiHttp);
 const faker = require('faker');
 
 const Owner = require('../../models/owners');
+const Pet = require('../../models/pets');
 
 describe('Owners REST api routes', () => {
 
@@ -31,6 +32,9 @@ describe('Owners REST api routes', () => {
     afterEach((done) => {
         Owner.deleteMany({}, (err) => {
             if(err) { console.error(`AFTER each delete ${err}`)}
+        })
+        Pet.deleteMany({}, (err) => {
+            if (err) { console.error(`AFTER each pet delete ${err}`)}
             done();
         })
     })
@@ -99,6 +103,56 @@ describe('Owners REST api routes', () => {
                     assert(result.status === 404);
                     done();
                 })
+        })
+    });
+
+    describe('PUT owner updates', (done) => {
+        beforeEach(() => {
+        })
+
+        afterEach(() => {
+        })
+
+        it('should change fields in the owner', (done) => {
+            let update = {
+                last_name: 'Murphy',
+                city: 'Wexford'
+            }
+            chai.request(server)
+                .put('/owners/' + owner._id)
+                .type('json')
+                .send(update)
+                .end((err, result) => {
+                    assert(result.status === 201);
+                    assert(result.body.data.lastName === update.lastName);
+                    assert((owner._id).equals(result.body.data._id));
+                    done();
+                })
+        });
+
+        it('should add a pet', (done) => {
+            var petData = {
+                name: 'tiddles',
+                owner: owner,
+                pet_type: 'cat',
+                visits: []
+            };
+            var pet = new Pet(petData);
+            pet.save().then().catch((err) => {})
+            console.log('Original Owner: ' + owner)
+            let update = { $push: { pets: pet } };
+
+            chai.request(server)
+                .put('/owners/' + owner._id)
+                .type('json')
+                .send(update)
+                .end((err, result) => {
+                    if (err) { console.error(`PUT new pet owner: ${err}`)}
+                    assert(result.status === 201);
+                    assert((owner._id).equals(result.body.data._id));
+                    assert((pet._id).equals(result.body.data.pets[0]));
+                    done();
+                });
         })
     });
 })

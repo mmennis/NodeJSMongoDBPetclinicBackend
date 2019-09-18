@@ -75,6 +75,8 @@ describe('Pets REST api routes', () => {
             chai.request(server)
                 .get('/pets/')
                 .end((err, result) => {
+                    if (err) { console.error(`GET all pets: ${err}`)}
+                    console.log(result.body.data);
                     assert(result.status === 200);
                     assert(result.body.data.length > 0);
                     assert((pet._id).equals(result.body.data[0]._id));
@@ -210,6 +212,7 @@ describe('Pets REST api routes', () => {
                 .type('json')
                 .send(update)
                 .end((err, result) => {
+                    if (err) { console.error(`PUT new vist in pet: ${err}`)}
                     assert(result.status === 201);
                     assert((pet._id).equals(result.body.data._id));
                     assert(result.body.data.visits.length === 0);
