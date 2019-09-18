@@ -32,7 +32,7 @@ describe('Vets REST api routes', () => {
 
     afterEach((done) => {
         Vet.deleteMany({}, (err) => {
-            if (err) { console.error(`AFTER EACH delete ${err}`)}
+            if (err) { console.error(`AFTER EACH delete ${err}`) }
             done();
         })
     })
@@ -45,22 +45,22 @@ describe('Vets REST api routes', () => {
                 .end((err, result) => {
                     assert(result.status === 200);
                     assert(result.body.data.length > 0);
-                    assert(JSON.stringify(result.body.data[0]._id) === JSON.stringify(vet._id) );
+                    assert(JSON.stringify(result.body.data[0]._id) === JSON.stringify(vet._id));
                     done();
                 });
         });
-    
+
         it('should GET by id', (done) => {
             chai.request(server)
                 .get('/vets/' + vet._id)
                 .end((err, result) => {
                     assert(result.status === 200);
-                    assert(JSON.stringify(result.body.data._id) === JSON.stringify(vet._id) );
+                    assert(JSON.stringify(result.body.data._id) === JSON.stringify(vet._id));
                     done();
                 });
         });
-    
-        it('return a 404 when no id match', (done) =>{
+
+        it('return a 404 when no id match', (done) => {
             chai.request(server)
                 .get('/vets/123456')
                 .end((err, result) => {
@@ -72,8 +72,7 @@ describe('Vets REST api routes', () => {
 
     describe('POST vet data', () => {
 
-        beforeEach(() => {
-        })
+        beforeEach(() => {})
 
         it('should create a new vet', (done) => {
             chai.request(server)
@@ -81,7 +80,7 @@ describe('Vets REST api routes', () => {
                 .type('form')
                 .send(vetData)
                 .end((err, result) => {
-                    if(err) { console.error(`POST create -> ${err}`)}
+                    if (err) { console.error(`POST create -> ${err}`) }
                     assert(result.status === 201);
                     Vet.findById(result.body.id, (err, vet) => {
                         assert(vet.last_name === vetData.last_name);
@@ -89,8 +88,8 @@ describe('Vets REST api routes', () => {
                         done();
                     })
                 })
-        })  
-        
+        })
+
         it('should fail to create if a required field is missing', (done) => {
             delete vetData['state']
             chai.request(server)
@@ -98,7 +97,7 @@ describe('Vets REST api routes', () => {
                 .type('form')
                 .send(vetData)
                 .end((err, result) => {
-                    if(err) { console.error(`POST create -> ${err}`)}
+                    if (err) { console.error(`POST create -> ${err}`) }
                     assert(result.status === 404);
                     done();
                 })
@@ -125,7 +124,7 @@ describe('Vets REST api routes', () => {
                 .type('json')
                 .send(newVetData)
                 .end((err, res) => {
-                    if (err) { console.log(`PUT problem ${err}`)}
+                    if (err) { console.log(`PUT problem ${err}`) }
                     assert(res.status === 201);
                     assert((vet._id).equals(res.body.data._id))
                     assert(newVetData.last_name === res.body.data.last_name);
@@ -153,4 +152,19 @@ describe('Vets REST api routes', () => {
         })
 
     })
+
+    describe('DELETE vet data', () => {
+        it.only('should remove a vet by id', (done) => {
+            chai.request(server)
+                .delete('/vets/' + vet._id)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE rest failed ${err}`) }
+                    assert(response.status === 201);
+                    let responseMsg = JSON.stringify(response.body.msg);
+                    assert(responseMsg.includes('Sucessfully removed vet id'));
+                    assert(responseMsg.includes(vet._id));
+                    done();
+                })
+        });
+    });
 });
