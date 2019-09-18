@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const mongoose = require('mongoose');
 
-var contents = fs.readFileSync(__dirname +'/samples/pet_names.txt', 'UTF-8');
+var contents = fs.readFileSync(__dirname + '/samples/pet_names.txt', 'UTF-8');
 const petNames = contents.trim().split(',');
 
 contents = fs.readFileSync(__dirname + '/samples/pet_types.txt', 'UTF-8');
@@ -35,13 +35,13 @@ module.exports = function() {
             dropDatabase('vets');
             dropDatabase('owners');
             dropDatabase('pets');
-        } catch(err) {
+        } catch (err) {
             console.error(`Probem dropping collections for seeding - ${err}`);
         }
     }
 
     let vetIds = [];
-    for(let i = 0; i < config.seedConstants.vetCount; i++) {
+    for (let i = 0; i < config.seedConstants.vetCount; i++) {
         const vet = new Vet({
             first_name: faker.name.firstName(),
             last_name: faker.name.lastName(),
@@ -54,50 +54,57 @@ module.exports = function() {
         });
         vet.save()
             .then(() => {
-                vetIds.push(vet._id); 
+                vetIds.push(vet._id);
             })
             .catch((err) => {
                 console.error(`SEEDING vet - ${err}`);
             });
     }
+    Vet.find({})
+        .then((vets) => {
+            for (let i = 0; i < config.seedConstants.ownerCount; i++) {
+                const owner = new Owner({
+                    first_name: faker.name.firstName(),
+                    last_name: faker.name.lastName(),
+                    address: faker.address.streetAddress(),
+                    city: faker.address.city(),
+                    state: faker.address.stateAbbr(),
+                    telephone: faker.phone.phoneNumber(),
+                    pets: []
+                });
+                let petCount = Math.floor(Math.random() * config.seedConstants.petCount) + 1;
 
-    for(let i = 0; i < config.seedConstants.ownerCount; i++) {
-        const owner = new Owner({
-            first_name: faker.name.firstName(),
-            last_name: faker.name.lastName(),
-            address: faker.address.streetAddress(),
-            city: faker.address.city(),
-            state: faker.address.stateAbbr(),
-            telephone: faker.phone.phoneNumber(),
-            pets: []
-        });
-        let petCount = Math.floor(Math.random() * config.seedConstants.petCount) + 1;
-        
-        for(let j = 0; j < petCount; j++) {
-            const pet = new Pet({
-                name: petNames[Math.floor((Math.random() * petNames.length))],
-                owner: owner,
-                pet_type: petTypes[Math.floor((Math.random() * petTypes.length))],
-                visits: []
-            });
-            let visitCount = Math.floor(Math.random() * config.seedConstants.visitCount);
-            for(k = 0; k < visitCount; k++) {
-                vetId = vetIds[Math.floor((Math.random() * vetIds.length))]
-                pet.visits.push({
-                    reason: faker.lorem.sentence(),
-                    vet: vetId
-                })
+                for (let j = 0; j < petCount; j++) {
+                    const pet = new Pet({
+                        name: petNames[Math.floor((Math.random() * petNames.length))],
+                        owner: owner,
+                        pet_type: petTypes[Math.floor((Math.random() * petTypes.length))],
+                        visits: []
+                    });
+                    let visitCount = Math.floor(Math.random() * config.seedConstants.visitCount);
+                    for (k = 0; k < visitCount; k++) {
+                        let visitVet = vets[Math.floor((Math.random() * vets.length))]
+                        pet.visits.push({
+                            reason: faker.lorem.sentence(),
+                            vet: visitVet
+                        })
+                    }
+
+                    owner.pets.push(pet);
+                    pet.save()
+                        .then()
+                        .catch((err) => console.error(`Pet create err ${err}`))
+                }
+                owner.save()
+                    .then(() => {
+                        //console.log(`Adding owner ${i} -> ${owner.first_name} ${owner.last_name}`) 
+                    })
+                    .catch((err) => comsole.error(`Owner create - ${err}`))
             }
-            
-            owner.pets.push(pet);
-            pet.save()
-                .then()
-                .catch((err) => console.error(`Pet create err ${err}`))
-        }
-        owner.save()
-            .then(() => {
-                //console.log(`Adding owner ${i} -> ${owner.first_name} ${owner.last_name}`) 
-            })
-            .catch((err) => comsole.error(`Owner create - ${err}`))
-    }  
+        })
+        .catch((err) => {
+            console.error(`Problem with loading up all vets ${err}`);
+        })
+
+
 }
