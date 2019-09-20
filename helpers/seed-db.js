@@ -49,7 +49,7 @@ module.exports = function() {
             address: faker.address.streetAddress(),
             city: faker.address.city(),
             state: faker.address.stateAbbr(),
-            telephone: faker.phone.phoneNumber,
+            telephone: faker.phone.phoneNumber(),
             specialty: vetSpecialties[Math.floor((Math.random() * vetSpecialties.length))]
         });
         vet.save()
