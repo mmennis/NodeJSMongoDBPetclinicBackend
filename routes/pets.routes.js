@@ -59,4 +59,15 @@ router.put('/:id', function(req, res) {
         })
 });
 
+router.delete('/:id', function(req, res) {
+    let petId = req.params.id;
+    Pet.deleteOne({ '_id': petId },(err) => {
+        if(err) { 
+            console.error(`Problem deleting pet ${petId}: ${err}`)
+            res.status(404).json({ error: `Cannot delete pet ${petId}: {err}`});
+            return;
+        }
+        res.status(201).json({ msg: `Sucessfully removed pet id ${petId}`});
+    })
+});
 module.exports = router;

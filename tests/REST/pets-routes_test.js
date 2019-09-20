@@ -222,4 +222,26 @@ describe('Pets REST api routes', () => {
         })
     })
 
+    describe('DELETE pet data', () => {
+        beforeEach(() => {
+        })
+
+        afterEach(() => {
+        })
+
+        it.only('should remove a pet by id', (done) => {
+            let petId = pet._id;
+            chai.request(server)
+                .delete('/pets/' + petId)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE pet: ${err}`)}
+                    assert(response.status === 201);
+                    let responseMsg = JSON.stringify(response.body.msg);
+                    assert(responseMsg.includes('Sucessfully removed pet id'));
+                    assert(responseMsg.includes(petId));
+                    done();
+                });
+        })
+    })
+
 })
