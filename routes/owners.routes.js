@@ -4,7 +4,7 @@ const router = express.Router();
 const Owner = require('../models/owners');
 
 router.get('/', function(req, res) {
-    Owner.find({}, function(err, owners) {
+    Owner.find(req.query, function(err, owners) {
         if (err) {
             res.status(500).json({ error: `Problem with owners data ${err}` })
             return;

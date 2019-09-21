@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const Pet = require('../models/pets');
 
 router.get('/', function(req, res) {
-    Pet.find({}, (err, pets) => {
+    Pet.find(req.query, (err, pets) => {
         if(err) {
             res.status(404).json({ error: `Find all pets ${err}`})
             return;
@@ -42,7 +42,6 @@ router.post('/', function(req, res) {
 router.put('/:id', function(req, res) {
     let petId = req.params.id;
     let petData = req.body;
-    //console.log(`RECEIVED ${JSON.stringify(petData)}`)
     Pet.findByIdAndUpdate(petId, 
         petData,
         { new: true },

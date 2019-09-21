@@ -136,6 +136,14 @@ describe('Pets model', () => {
             })
         })
 
+        it('should find a pet by owner id', (done) => {
+            Pet.find({ 'owner': owner._id }, (err, result) => {
+                if(err) { console.log(`FIND by owner id - ${err}`)}
+                assert((pet._id).equals(result[0]._id));
+                done();
+            })
+        })
+
         it('should save a pet with owner and visits', (done) => {
             Pet.findById(pet._id)
                 .then((savedPet) => {

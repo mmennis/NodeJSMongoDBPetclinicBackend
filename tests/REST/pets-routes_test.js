@@ -102,8 +102,65 @@ describe('Pets REST api routes', () => {
                     done();
                 });
         })
-    });
+    }) // describe GET
 
+    describe('GET filter pet data',() => {
+
+        beforeEach((done) => {
+            petData = {
+                name: 'fido',
+                owner: owner,
+                pet_type: 'camel',
+                visits: [
+                    {
+                        visit_date: Date.now(),
+                        reason: 'Sore paw',
+                        vet: vet,
+                    }
+                ]
+            };
+            let newPet = new Pet(petData);
+            newPet.save().then(() => {}); // for retrieval via GET
+            done();
+        })
+
+        it('should filter by pet type', (done) => {
+            chai.request(server)
+                .get('/pets?pet_type=camel')
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered pets: ${err}`)}
+                    assert(response.status === 200);
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].pet_type === 'camel');
+                    done();
+                });
+        })
+
+        it('should filter by pet type and name', (done) => {
+            chai.request(server)
+                .get('/pets?pet_type=camel&name=fido')
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered pets: ${err}`)}
+                    assert(response.status === 200);
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].pet_type === 'camel');
+                    assert(response.body.data[0].name === 'fido');
+                    done();
+                });
+        })
+
+        it('should filter by owner', (done) => {
+            chai.request(server)
+                .get('/pets?owner=' + owner._id)
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered pets: ${err}`)}
+                    assert(response.status === 200);
+                    assert(response.body.data.length === 2);
+                    assert(response.body.data[1].pet_type === 'camel');
+                    done();
+                });
+        })
+    }) // describe GET filter
 
     describe('POST pet data', () => {
 
@@ -151,7 +208,7 @@ describe('Pets REST api routes', () => {
                     done();
                 })
         })
-    })
+    }) // describe POST
 
     describe('PUT pet data', () => {
         beforeEach(() => {
@@ -220,28 +277,28 @@ describe('Pets REST api routes', () => {
                 })
 
         })
-    })
+    }) // describe PUT
 
-    describe('DELETE pet data', () => {
-        beforeEach(() => {
-        })
+    describe('DELETE pet data', () => {
+        beforeEach(() => {
+        })
 
-        afterEach(() => {
-        })
+        afterEach(() => {
+        })
 
-        it.only('should remove a pet by id', (done) => {
-            let petId = pet._id;
-            chai.request(server)
-                .delete('/pets/' + petId)
-                .end((err, response) => {
-                    if (err) { console.error(`DELETE pet: ${err}`)}
-                    assert(response.status === 201);
-                    let responseMsg = JSON.stringify(response.body.msg);
-                    assert(responseMsg.includes('Sucessfully removed pet id'));
-                    assert(responseMsg.includes(petId));
-                    done();
-                });
-        })
-    })
+        it('should remove a pet by id', (done) => {
+            let petId = pet._id;
+            chai.request(server)
+                .delete('/pets/' + petId)
+                .end((err, response) => {
+                    if (err) { console.error(`DELETE pet: ${err}`)}
+                    assert(response.status === 201);
+                    let responseMsg = JSON.stringify(response.body.msg);
+                    assert(responseMsg.includes('Sucessfully removed pet id'));
+                    assert(responseMsg.includes(petId));
+                    done();
+                });
+        })
+    }) // describe DELETE
 
 })

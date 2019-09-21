@@ -4,7 +4,7 @@ const router = express.Router();
 const Vet = require('../models/vets');
 
 router.get('/', function(req, res) {
-    Vet.find({}, (err, vets) => {
+    Vet.find(req.query, (err, vets) => {
         if (err) {
             res.status(500).json({ error: `Problem all vets - ${err}` });
             return;
@@ -12,6 +12,7 @@ router.get('/', function(req, res) {
         res.status(200).json({ data: vets });
     });
 });
+
 
 router.get('/:id', function(req, res) {
     let vetId = req.params.id;

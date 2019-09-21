@@ -70,7 +70,50 @@ describe('Owners REST api routes', () => {
                     done();
                 })
         })
-    })
+    }) // describe GET
+
+    describe('GET filters vets', () => {
+        beforeEach((done) => {
+            ownerData = {
+                first_name: 'Dan',
+                last_name: 'PetOwner',
+                address: faker.address.streetAddress(),
+                city: faker.address.city(),
+                state: faker.address.stateAbbr(),
+                telephone: faker.phone.phoneNumber(),
+                pets: []
+            };
+            owner = new Owner(ownerData);
+            owner.save()
+                .then(() => done())
+                .catch((err) => console.error(`BEFORE each - ${err}`));
+        })
+
+        it('should filter by owner last name', (done) => {
+            chai.request(server)
+                .get('/owners?last_name=PetOwner')
+                .end((err, response) => {
+                    if (err) { console.error(`GET owners filter ${err}`)}
+                    assert(response.status === 200);
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].last_name === 'PetOwner');
+                    done();
+                })
+        })
+
+        it('should filter by last and first name', (done) => {
+            chai.request(server)
+                .get('/owners?last_name=PetOwner&first_name=Dan')
+                .end((err, response) => {
+                    if (err) { console.error(`GET owners filter ${err}`)}
+                    assert(response.status === 200);
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].last_name === 'PetOwner');
+                    assert(response.body.data[0].first_name === 'Dan');
+                    done();
+                })
+        })
+    }) // describe GET filters
 
     describe('POST owner data', () => {
         beforeEach(() => {})
@@ -103,7 +146,7 @@ describe('Owners REST api routes', () => {
                     done();
                 })
         })
-    });
+    }) // describe POST
 
     describe('PUT owner updates', () => {
         beforeEach(() => {})
@@ -151,7 +194,7 @@ describe('Owners REST api routes', () => {
                     done();
                 });
         })
-    });
+    }) // describe PUT
 
     describe('DELETE owner data', () => {
         it('should delte an owner by id', (done) => {
@@ -181,5 +224,5 @@ describe('Owners REST api routes', () => {
                     done();
                 })
         });
-    })
+    }) // describe DELETE
 })

@@ -10,5 +10,8 @@ module.exports = {
     },
     db: {
         URI: 'mongodb://localhost:27017/petclinic_test',
-    }
+    },
+    mongoose: {
+        debug: false
+    },
 };

@@ -68,7 +68,53 @@ describe('Vets REST api routes', () => {
                     done();
                 })
         })
-    });
+
+    }) // describe GET
+
+    describe('GET filters vets', () => {
+
+        beforeEach((done) => {
+            vetData = {
+                first_name: 'Mike',
+                last_name: 'Murphy',
+                office_hours: '8:00 AM - 5:00 PM',
+                address: faker.address.streetAddress(),
+                city: faker.address.city(),
+                state: faker.address.stateAbbr(),
+                telephone: faker.phone.phoneNumber(),
+                specialty: 'surgery'
+            };
+            vet = new Vet(vetData);
+            vet.save()
+                .then(() => done())
+                .catch((err) => console.error(err));
+        })
+
+        it('should return vets filtered by last name', (done) => {
+            chai.request(server)
+                .get('/vets?last_name=Murphy')
+                .end((err, result) => {
+                    let returnArray = result.body.data;
+                    assert(result.status === 200);
+                    assert(returnArray.length === 1);
+                    assert(returnArray[0].last_name === 'Murphy');
+                    done();
+            })
+        });
+
+        it('should filter by last and first name', (done) => {
+            chai.request(server)
+                .get('/vets?last_name=Murphy&first_name=Mike')
+                .end((err, result) => {
+                    let returnArray = result.body.data;
+                    assert(result.status === 200);
+                    assert(returnArray.length === 1);
+                    assert(returnArray[0].last_name === 'Murphy');
+                    assert(returnArray[0].first_name === 'Mike');
+                    done();
+            })
+        });
+    }) // describe GET filters
 
     describe('POST vet data', () => {
 
@@ -102,7 +148,7 @@ describe('Vets REST api routes', () => {
                     done();
                 })
         })
-    })
+    }) // describe POST
 
     describe('PUT vet data', () => {
         beforeEach(() => {
@@ -151,7 +197,7 @@ describe('Vets REST api routes', () => {
                 })
         })
 
-    })
+    }) // describe PUT
 
     describe('DELETE vet data', () => {
         it('should remove a vet by id', (done) => {
@@ -180,5 +226,5 @@ describe('Vets REST api routes', () => {
                     done();
                 })
         })
-    });
+    }) // describe DELETE
 });
