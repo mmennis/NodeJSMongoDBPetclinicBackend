@@ -7,6 +7,7 @@ const morgan = require('morgan');
 const compression = require('compression');
 const cors = require('cors');
 const errorHandler = require('errorhandler');
+const helmet = require('helmet');
 const path = require('path');
 const debug = require('debug');
 
@@ -17,6 +18,7 @@ module.exports = function(app) {
 
     app.use(cors());
     app.use(compression());
+    app.use(helmet());
     app.use(bodyParser.urlencoded({
         extended: true,
         limit: '50mb'

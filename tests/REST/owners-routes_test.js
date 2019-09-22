@@ -179,7 +179,6 @@ describe('Owners REST api routes', () => {
             };
             var pet = new Pet(petData);
             pet.save().then().catch((err) => {})
-            console.log('Original Owner: ' + owner)
             let update = { $push: { pets: pet } };
 
             chai.request(server)

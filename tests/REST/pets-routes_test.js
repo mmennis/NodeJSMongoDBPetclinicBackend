@@ -76,7 +76,6 @@ describe('Pets REST api routes', () => {
                 .get('/pets/')
                 .end((err, result) => {
                     if (err) { console.error(`GET all pets: ${err}`)}
-                    console.log(result.body.data);
                     assert(result.status === 200);
                     assert(result.body.data.length > 0);
                     assert((pet._id).equals(result.body.data[0]._id));
