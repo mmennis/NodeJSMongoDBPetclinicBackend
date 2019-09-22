@@ -28,7 +28,7 @@ module.exports = function(app) {
     }));
 
     if ('development' === env || 'test' === env) {
-        app.use(morgan('dev'));
+        app.use(morgan('combined'));
         app.use(errorHandler());
     }
 }

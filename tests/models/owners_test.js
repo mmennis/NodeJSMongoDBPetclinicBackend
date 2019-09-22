@@ -242,7 +242,7 @@ describe('Owner model', () => {
         });
     }); // with pets
 
-    describe('testing removal of visits', () => {
+    describe('testing removal of a pet', () => {
         let pt;
         let ownr
         beforeEach((done) => {
@@ -281,8 +281,7 @@ describe('Owner model', () => {
             done();
         })
 
-        // FIXME: No idea why this doesn't work
-        it.skip('should update owner to remove a pet by id', (done) => {
+        it('should update owner to remove a pet by id', (done) => {
             const ptId = ownr.pets[0]._id;
             Owner.findByIdAndUpdate(ownr._id, 
                 { $pull: { pets: { $elemMatch: { _id: ptId } } } }, 
@@ -294,6 +293,6 @@ describe('Owner model', () => {
                     done();
             });
         })
-    })
+    }); // removal of pet
 
 });
