@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const MongoQS = require('mongo-querystring'); 
+const qs = new MongoQS();
 
 const Pet = require('../models/pets');
 
 router.get('/', function(req, res) {
-    Pet.find(req.query, (err, pets) => {
+    // See docs for mongo-querystring https://www.npmjs.com/package/mongo-querystring
+    let queryString = qs.parse(req.query); // convert url parameters to mongo filter (>, <, etc.)
+    Pet.find(queryString, (err, pets) => {
         if(err) {
             res.status(404).json({ error: `Find all pets ${err}`})
             return;

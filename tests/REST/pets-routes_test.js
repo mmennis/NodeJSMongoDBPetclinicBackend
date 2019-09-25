@@ -46,6 +46,7 @@ describe('Pets REST api routes', () => {
             name: 'fido',
             owner: owner,
             pet_type: 'dog',
+            age: 15,
             visits: [
                 {
                     visit_date: Date.now(),
@@ -110,6 +111,7 @@ describe('Pets REST api routes', () => {
                 name: 'fido',
                 owner: owner,
                 pet_type: 'camel',
+                age: 10,
                 visits: [
                     {
                         visit_date: Date.now(),
@@ -156,6 +158,39 @@ describe('Pets REST api routes', () => {
                     assert(response.status === 200);
                     assert(response.body.data.length === 2);
                     assert(response.body.data[1].pet_type === 'camel');
+                    done();
+                });
+        })
+
+
+        it('should filter by age equality', (done) => {
+            chai.request(server)
+                .get('/pets?age=15')
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered by age ${err}`)}
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].age === 15);
+                    done();
+                });
+        })
+
+        it('should filter by age > boolean operators', (done) => {
+            chai.request(server)
+                .get('/pets?age=>12')
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered by age ${err}`)}
+                    assert(response.body.data.length === 1);
+                    assert(response.body.data[0].age > 12);
+                    done();
+                });
+        })
+
+        it('should filter by age < boolean operators', (done) => {
+            chai.request(server)
+                .get('/pets?age=<10')
+                .end((err, response) => {
+                    if (err) { console.error(`GET filtered by age ${err}`)}
+                    assert(response.body.data.length === 0);
                     done();
                 });
         })
