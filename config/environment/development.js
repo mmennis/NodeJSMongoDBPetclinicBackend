@@ -7,9 +7,9 @@ module.exports = {
     seedDB: true,
     seedConstants: {
         petCount: 4,
-        ownerCount: 150,
-        vetCount: 40,
-        visitCount: 10
+        ownerCount: 250,
+        vetCount: 60,
+        visitCount: 20
     },
     webApp: {
         url: 'http://localhost:80'

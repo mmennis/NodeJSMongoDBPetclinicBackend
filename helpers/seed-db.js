@@ -20,6 +20,10 @@ async function dropDatabase(name) {
     await mongoose.connection.collection(name).drop();
 }
 
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 module.exports = function() {
 
     console.log('------------------------------------------------');
@@ -79,6 +83,7 @@ module.exports = function() {
                         name: petNames[Math.floor((Math.random() * petNames.length))],
                         owner: owner,
                         pet_type: petTypes[Math.floor((Math.random() * petTypes.length))],
+                        age: getRandomInt(20),
                         visits: []
                     });
                     let visitCount = Math.floor(Math.random() * config.seedConstants.visitCount);

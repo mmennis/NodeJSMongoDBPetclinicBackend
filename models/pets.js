@@ -14,6 +14,13 @@ const PetSchema = new Schema({
         type: String,
         required: true
     },
+    age: {
+        type: Number,
+        default: 1,
+        required: true,
+        min: 0,
+        max: 20
+    },
     visits: [
         {
             visit_date: {
