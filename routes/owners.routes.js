@@ -1,10 +1,27 @@
 const express = require('express');
 const router = express.Router();
+const MongoQS = require('mongo-querystring'); 
+const qs = new MongoQS();
 
 const Owner = require('../models/owners');
 
+/**
+ * @swagger
+ * 
+ * /owners:
+ *   get:
+ *     tags:
+ *       - owners
+ *     description: Retrieve list of owners filtered
+ *     responses:
+ *       200:
+ *         description: list of owners
+ *       404:
+ *         description: A problem was found with retrieval
+ */
 router.get('/', function(req, res) {
-    Owner.find(req.query, function(err, owners) {
+    let queryString = qs.parse(req.query); // convert url parameters to mongo filter (>, <, etc.)
+    Owner.find(queryString, function(err, owners) {
         if (err) {
             res.status(500).json({ error: `Problem with owners data ${err}` })
             return;
@@ -13,6 +30,20 @@ router.get('/', function(req, res) {
     });
 });
 
+/**
+ * @swagger
+ * 
+ * /owners/{id}:
+ *   get:
+ *     tags:
+ *       - owners
+ *     description: Retrieve list of owners filtered
+ *     responses:
+ *       200:
+ *         description: list of owners
+ *       404:
+ *         description: A problem was found with retrieval
+ */
 router.get('/:id', function(req, res) {
     Owner.findById(req.params.id, function(err, owner) {
         if (err) {
@@ -23,6 +54,20 @@ router.get('/:id', function(req, res) {
     });
 });
 
+/**
+ * @swagger
+ * 
+ * /owners:
+ *   post:
+ *     tags:
+ *       - owners
+ *     description: Create a new owner
+ *     responses:
+ *       201:
+ *         description: new owner id
+ *       404:
+ *         description: A problem was found with creation
+ */
 router.post('/', function(req, res) {
     let ownerData = req.body;
     let owner = new Owner(ownerData);
@@ -37,6 +82,20 @@ router.post('/', function(req, res) {
         })
 });
 
+/**
+ * @swagger
+ * 
+ * /owners/{id}:
+ *   put:
+ *     tags:
+ *       - owners
+ *     description: Update owner by id
+ *     responses:
+ *       201:
+ *         description: new updated owner
+ *       404:
+ *         description: A problem was found with update
+ */
 router.put('/:id', function(req, res, next) {
     let ownerId = req.params.id;
     let ownerUpdate = req.body;
@@ -56,6 +115,20 @@ router.put('/:id', function(req, res, next) {
         });
 });
 
+/**
+ * @swagger
+ * 
+ * /owners/{id}:
+ *   delete:
+ *     tags:
+ *       - owners
+ *     description: Delete an owner by id
+ *     responses:
+ *       201:
+ *         description: success message
+ *       404:
+ *         description: A problem was found with update
+ */
 router.delete('/:id', function(req, res, next) {
     let ownerId = req.params.id;
     Owner.deleteOne({ '_id': ownerId }, (err) => {

@@ -13,3 +13,6 @@ $ NODE_ENV=development npm start
 
 $ NODE_ENV=test npm run test
 ```
+
+For API documentation with development server running
+http://localhost:4100/docs 

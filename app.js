@@ -11,6 +11,13 @@ const expressConfig = require('./config/express');
 
 const seedDb = require('./helpers/seed-db');
 
+const swaggerSpec = require('./config/swagger').spec();
+const swaggerUI = require('swagger-ui-express');
+const swaggerOptions = {
+    customeSiteTitle: 'PetClinic REST API'
+};
+
+console.log(swaggerSpec);
 const PORT = config.port;
 //mongoose.set('useCreateIndex', true);
 
@@ -31,6 +38,12 @@ expressConfig(app);
 
 // Register all routes from local routes.js file
 allRoutes(app);
+
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec) );
+app.get('/docs.json', (req, res) => {  
+    res.setHeader('Content-Type', 'application/json');  
+    res.status(200).json(swaggerSpec);  
+});
 
 app.get('/', function(req, res) {
     res.send('Hello World!!');

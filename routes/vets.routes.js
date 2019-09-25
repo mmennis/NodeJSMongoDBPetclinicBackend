@@ -1,10 +1,27 @@
 const express = require('express');
 const router = express.Router();
+const MongoQS = require('mongo-querystring'); 
+const qs = new MongoQS();
 
 const Vet = require('../models/vets');
 
+/**
+ * @swagger
+ * 
+ * /vets:
+ *   get:
+ *     tags:
+ *       - vets
+ *     description: Retrieve list of vets filtered
+ *     responses:
+ *       200:
+ *         description: list of vets
+ *       404:
+ *         description: A problem was found with retrieval
+ */
 router.get('/', function(req, res) {
-    Vet.find(req.query, (err, vets) => {
+    let queryString = qs.parse(req.query); // convert url parameters to mongo filter (>, <, etc.)
+    Vet.find(queryString, (err, vets) => {
         if (err) {
             res.status(500).json({ error: `Problem all vets - ${err}` });
             return;
@@ -13,7 +30,20 @@ router.get('/', function(req, res) {
     });
 });
 
-
+/**
+ * @swagger
+ * 
+ * /vets/{id}:
+ *   get:
+ *     tags:
+ *       - vets
+ *     description: Retrieve list of vets filtered
+ *     responses:
+ *       200:
+ *         description: list of vets
+ *       404:
+ *         description: A problem was found with retrieval
+ */
 router.get('/:id', function(req, res) {
     let vetId = req.params.id;
     Vet.findById(vetId, (err, vet) => {
@@ -25,6 +55,20 @@ router.get('/:id', function(req, res) {
     })
 });
 
+/**
+ * @swagger
+ * 
+ * /vets:
+ *   post:
+ *     tags:
+ *       - vets
+ *     description: Create a new vet
+ *     responses:
+ *       201:
+ *         description: new vet id
+ *       404:
+ *         description: A problem was found with creation
+ */
 router.post('/', function(req, res) {
     let vetData = req.body;
     let vet = new Vet(vetData);
@@ -39,6 +83,20 @@ router.post('/', function(req, res) {
         })
 })
 
+/**
+ * @swagger
+ * 
+ * /vets/{id}:
+ *   put:
+ *     tags:
+ *       - vets
+ *     description: Update vet by id
+ *     responses:
+ *       201:
+ *         description: new updated vet
+ *       404:
+ *         description: A problem was found with update
+ */
 router.put('/:id', function(req, res) {
     let vetData = req.body;
     let vetId = req.params.id;
@@ -58,6 +116,20 @@ router.put('/:id', function(req, res) {
 
 });
 
+/**
+ * @swagger
+ * 
+ * /vets/{id}:
+ *   delete:
+ *     tags:
+ *       - vets
+ *     description: Delete a vet by id
+ *     responses:
+ *       201:
+ *         description: success message
+ *       404:
+ *         description: A problem was found with update
+ */
 router.delete('/:id', function(req, res, next) {
     let vetId = req.params.id;
     Vet.deleteOne({ '_id': vetId }, (err) => {
