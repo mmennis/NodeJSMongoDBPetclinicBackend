@@ -6,6 +6,7 @@ const config = require('./environment/config');
 
 const options = {
     definition: {
+        components: {},
         info: {
             description,
             version,
@@ -18,7 +19,7 @@ const options = {
             'http'
         ],
     },
-    apis: ['./routes/**/*.js'],
+    apis: ['./routes/**/*.js', './models/components.js'],
 };
 
 module.exports = {

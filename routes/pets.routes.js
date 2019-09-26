@@ -13,7 +13,7 @@ const Pet = require('../models/pets');
  *   get:
  *     tags:
  *       - pets
- *     description: Returns filtered list of pets per url paramerets
+ *     description: Returns filtered list of pets per url paramerets. URL query parameters should fit to [mongo-querystring](https://www.npmjs.com/package/mongo-querystring) format.
  *     responses:
  *       200:
  *         description: List of matching pets
