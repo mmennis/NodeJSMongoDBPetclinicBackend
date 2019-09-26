@@ -17,7 +17,7 @@ const swaggerOptions = {
     customeSiteTitle: 'PetClinic REST API'
 };
 
-console.log(swaggerSpec);
+//console.log(swaggerSpec);
 const PORT = config.port;
 //mongoose.set('useCreateIndex', true);
 
