@@ -6,13 +6,12 @@ services:
       dockerfile: docker/Dockerfile.test
       args:
         port: ${PORT}
-      env_file: 
-        - ../.env
-      restart: always
-      ports:
-        = "${PORT}:${PORT}"
-      environment: 
-        WAIT_HOSTS: database-test:27017
+    env_file:
+      - ../.env
+    ports:
+      - "${PORT}:${PORT}"
+    environment: 
+      WAIT_HOSTS: database-test:27017
   database-test:
     image: mongo:4.0
     env_file: 
@@ -21,4 +20,4 @@ services:
       - ".${MONGO_TEST_DATA_DIR}:${MONGO_TEST_DATA_DIR}"
     expose:
       - 27107
-    command: "mongod --smallfiles logpath=${MONGO_LOG_FILE}"
+    command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"

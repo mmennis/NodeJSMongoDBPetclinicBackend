@@ -9,7 +9,7 @@ module.exports = {
         url: 'http://localhost:80'
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic_test',
+        URI: 'mongodb://database-test:27017/petclinic_test',
     },
     mongoose: {
         debug: false

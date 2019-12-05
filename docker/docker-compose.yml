@@ -21,4 +21,4 @@ services:
       - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
     expose:
       - 27107
-    command: "mongod --smallfiles logpath=${MONGO_LOG_FILE}"
+    command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"
