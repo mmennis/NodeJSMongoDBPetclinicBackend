@@ -4,11 +4,11 @@ module.exports = {
     DEBUG: '',
     port: 4100,
     ip: '0.0.0.0',
-    seedDB: true,
+    seedDB: false,
     webApp: {
         url: 'http://localhost:80'
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic',
+        URI: 'mongodb://example:example@database:27017/petclinic?authMechanism=SCRAM-SHA-1&authSource=admin',
     }
 };

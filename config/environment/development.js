@@ -15,7 +15,7 @@ module.exports = {
         url: 'http://localhost:80'
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic_dev',
+        URI: 'mongodb://example:example@database-test:27017/petclinic_dev?authMechanism=SCRAM-SHA-1&authSource=admin',
     },
     mongoose: {
         debug: false

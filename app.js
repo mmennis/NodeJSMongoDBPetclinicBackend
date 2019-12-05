@@ -52,5 +52,6 @@ app.get('/', function(req, res) {
 app.listen(PORT, function() {
     console.log(`Server is listening on port ${PORT} in ${app.get('env')} mode`);
 });
+app.emit('APP_STARTED');
 
 module.exports = app;
