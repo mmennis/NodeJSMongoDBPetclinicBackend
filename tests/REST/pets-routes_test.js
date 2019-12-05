@@ -295,7 +295,7 @@ describe('Pets REST api routes', () => {
                 })
         })
 
-        it('should remove a visit', (done) => {
+        it.skip('should remove a visit', (done) => {
             let visitId = pet.visits[0]._id;
             let update = { $pull: { visits: { $elemMatch : { _id : visitId }}}};
             chai.request(server)

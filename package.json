@@ -4,8 +4,10 @@
     "description": "Implementation of PetClinic Demo in NodeJS",
     "main": "index.js",
     "scripts": {
-        "test": "nodemon --exec 'mocha \"tests/**/*test.js\" --recursive  '",
-        "start": "nodemon app.js"
+        "start": "nodemon app.js",
+        "production": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.yml up -d",
+        "build": "docker-compose -f docker/docker-compose.yml build",
+        "test": "docker-compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit"
     },
     "repository": {
         "type": "git",

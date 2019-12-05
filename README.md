@@ -1,4 +1,6 @@
 # PetClinic NodeJS
+[![Build Status](https://travis-ci.org/mmennis/NodeJSMongoDBPetclinicBackend.svg?branch=master)](https://travis-ci.org/mmennis/NodeJSMongoDBPetclinicBackend)
+
 Backend server to support Pet Clinic Demo app in either React or Angular
 
 Database is MongoDB on localhost 
