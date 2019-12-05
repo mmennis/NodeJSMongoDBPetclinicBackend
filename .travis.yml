@@ -1,0 +1,14 @@
+services: docker
+
+before_install:
+  - docker -v
+  - cp example.env .env
+  - sudo /etc/init/postgresql stop
+  - sudo service mysql stop
+
+install:
+  - npm run build
+
+script:
+  - npm test
+
