@@ -7,7 +7,7 @@
         "start": "nodemon app.js",
         "production": "docker-compose -f docker/docker-compose.yml -f docker/docker-compose.yml up -d",
         "build": "docker-compose -f docker/docker-compose.yml build",
-        "test": "docker-compose -f docker/docker-compose.test up --build --abort-on-container-exit",
+        "test": "docker-compose -f docker/docker-compose.test up --build --abort-on-container-exit"
     },
     "repository": {
         "type": "git",
