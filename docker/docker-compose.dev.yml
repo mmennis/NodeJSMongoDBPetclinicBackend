@@ -1,9 +1,9 @@
 version: "3"
 services:
-  backend:
+  backend-dev:
     build:
       context: ../
-      dockerfile: docker/Dockerfile.production
+      dockerfile: docker/Dockerfile.development
       args:
         port: ${PORT}
     env_file: 

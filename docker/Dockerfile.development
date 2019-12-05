@@ -2,9 +2,9 @@ FROM node:12-alpine
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait wait
 RUN chmod +x /wait
 WORKDIR /home/nodejs/app
-ENV NODE_ENV dev
+ENV NODE_ENV development
 COPY package*.json ./
-RUN npm install && npm install -g mocha
-ARG PORT
+RUN npm install
+ARG port=80
 COPY . ./
-CMD /wait && NODE_ENV=test mocha tests/**/*test.js --recursive --exit
+CMD /wait && NODE_ENV=development node app.js 

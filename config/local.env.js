@@ -4,6 +4,6 @@ module.exports = {
         expiresIn: 2629746000
     },
     db: {
-        URI: 'mongodb://localhost:27017/petclinic',
+        URI: 'mongodb://example:example@database:27017/petclinic?authMechanism=SCRAM-SHA-1&authSource=admin',
     }
 }
