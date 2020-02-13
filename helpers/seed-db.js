@@ -36,9 +36,10 @@ module.exports = function() {
     } else {
         try {
             console.log('Dropping collections before re-seeding');
-            dropDatabase('vets');
-            dropDatabase('owners');
-            dropDatabase('pets');
+            // FIXME
+            //dropDatabase('vets');
+            //dropDatabase('owners');
+            //dropDatabase('pets');
         } catch (err) {
             console.error(`Probem dropping collections for seeding - ${err}`);
         }
